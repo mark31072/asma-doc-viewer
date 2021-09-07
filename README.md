@@ -1,4 +1,5 @@
-# react-doc-viewer
+# asma-doc-viewer
+# this is a fork of react-doc-viewer for make it work in vite projects
 
 # Contents
 
