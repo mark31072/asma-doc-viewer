@@ -6,6 +6,8 @@ yarn.lock
 
 # dev
 /.vscode
+/.idea
+.idea
 
 # dependencies
 /node_modules
