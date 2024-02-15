@@ -1,6 +1,6 @@
 import { DocRenderer, IConfig, IDocument } from "../types";
 import { MainStateActions } from "./actions";
-export type IMainState = {
+export declare type IMainState = {
     currentFileNo: number;
     documents: IDocument[];
     documentLoading?: boolean;
@@ -10,5 +10,5 @@ export type IMainState = {
     pluginRenderers?: DocRenderer[];
 };
 export declare const initialState: IMainState;
-export type MainStateReducer = (state: IMainState, action: MainStateActions) => IMainState;
+export declare type MainStateReducer = (state: IMainState, action: MainStateActions) => IMainState;
 export declare const mainStateReducer: MainStateReducer;

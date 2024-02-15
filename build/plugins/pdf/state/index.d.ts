@@ -1,6 +1,11 @@
-import { FC } from "react";
+import React, { Dispatch, FC } from "react";
 import { IMainState } from "../../../state/reducer";
-declare const PDFContext: any;
+import { PDFActions } from "./actions";
+import { IPDFState } from "./reducer";
+declare const PDFContext: React.Context<{
+    state: IPDFState;
+    dispatch: Dispatch<PDFActions>;
+}>;
 declare const PDFProvider: FC<{
     mainState: IMainState;
 }>;

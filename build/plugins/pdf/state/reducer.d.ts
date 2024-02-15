@@ -1,6 +1,6 @@
 import { IMainState } from "../../../state/reducer";
 import { PDFActions as PDFStateActions } from "./actions";
-export type IPDFState = {
+export declare type IPDFState = {
     zoomLevel: number;
     paginated: boolean;
     numPages: number;
@@ -8,5 +8,5 @@ export type IPDFState = {
     mainState?: IMainState;
 };
 export declare const initialPDFState: IPDFState;
-export type PDFStateReducer = (state: IPDFState, action: PDFStateActions) => IPDFState;
+export declare type PDFStateReducer = (state: IPDFState, action: PDFStateActions) => IPDFState;
 export declare const reducer: PDFStateReducer;

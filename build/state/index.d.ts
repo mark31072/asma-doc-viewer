@@ -1,5 +1,10 @@
-import { FC } from "react";
+import React, { Dispatch, FC } from "react";
 import { DocViewerProps } from "..";
-declare const DocViewerContext: any;
+import { MainStateActions } from "./actions";
+import { IMainState } from "./reducer";
+declare const DocViewerContext: React.Context<{
+    state: IMainState;
+    dispatch: Dispatch<MainStateActions>;
+}>;
 declare const AppProvider: FC<DocViewerProps>;
 export { DocViewerContext, AppProvider };
