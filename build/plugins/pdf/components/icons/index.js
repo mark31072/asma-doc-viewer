@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TogglePaginationPDFIcon = exports.ResetZoomPDFIcon = exports.ZoomOutPDFIcon = exports.ZoomInPDFIcon = exports.DownloadPDFIcon = exports.NextPDFNavIcon = exports.PrevPDFNavIcon = void 0;
+exports.PrintPDFIcon = exports.TogglePaginationPDFIcon = exports.ResetZoomPDFIcon = exports.ZoomOutPDFIcon = exports.ZoomInPDFIcon = exports.DownloadPDFIcon = exports.NextPDFNavIcon = exports.PrevPDFNavIcon = void 0;
 var react_1 = __importDefault(require("react"));
 var PrevPDFNavIcon = function (props) {
     return react_1.default.createElement(PDFNavArrow, __assign({}, props, { reverse: true }));
@@ -71,10 +71,9 @@ var TogglePaginationPDFIcon = function (props) {
         react_1.default.createElement("path", { fill: color || "#aaa", d: "M206.004,200.723h-31.231V96.277h31.231c0.005,0,0.014,0,0.019,0c5.289,0,9.575-4.287,9.575-9.574\n  c0-2.342-0.841-4.488-2.236-6.151L156.168,3.851C154.36,1.428,151.515,0,148.492,0c-3.023,0-5.868,1.428-7.675,3.851L83.302,80.98\n  c-2.166,2.902-2.507,6.779-0.883,10.017c1.624,3.236,4.936,5.28,8.559,5.28h31.231v104.445H90.978c-3.623,0-6.934,2.044-8.559,5.28\n  c-1.624,3.237-1.283,7.114,0.883,10.017l57.513,77.129c1.808,2.424,4.652,3.852,7.675,3.852c3.023,0,5.868-1.428,7.676-3.852\n  l57.514-77.129c2.164-2.902,2.507-6.779,0.883-10.017C212.938,202.767,209.627,200.723,206.004,200.723z" })));
 };
 exports.TogglePaginationPDFIcon = TogglePaginationPDFIcon;
-var DownloadPDFIcon = function (props) {
+var PrintPDFIcon = function (props) {
     var color = props.color, size = props.size, reverse = props.reverse;
     return (react_1.default.createElement("svg", { width: size || "100%", height: size || "100%", style: { transform: "".concat(reverse ? "rotate(180deg)" : "") }, id: "Layer_1", viewBox: "0 0 24 24" },
-        react_1.default.createElement("path", { d: "M20.57,9.43A8,8,0,0,0,5.26,10,5,5,0,1,0,5,20h5V18H5a3,3,0,0,1,0-6,3.1,3.1,0,0,1,.79.12l1.12.31.14-1.15a6,6,0,0,1,11.74-.82l.15.54.54.16A3.46,3.46,0,0,1,22,14.5,3.5,3.5,0,0,1,18.5,18H16v2h2.5A5.48,5.48,0,0,0,20.57,9.43Z", fill: color || "#aaa" }),
-        react_1.default.createElement("polygon", { points: "12 11 12 15.59 10.71 14.29 9.29 15.71 13 19.41 16.71 15.71 15.29 14.29 14 15.59 14 11 12 11", fill: color || "#aaa" })));
+        react_1.default.createElement("path", { fill: color || "#aaa", d: "M16.5 7.5L13 4 9.5 7.5M14 2h-4M7.5 10.5h9a1.5 1.5 0 0 0 1.5-1.5V6A1.5 1.5 0 0 0 16.5 4h-9A1.5 1.5 0 0 0 6 5.5V9A1.5 1.5 0 0 0 7.5 10.5zM18 14.5A3.5 3.5 0 0 1 14.5 18h-9A3.5 3.5 0 0 1 2 14.5v-9A3.5 3.5 0 0 1 5.5 2h9A3.5 3.5 0 0 1 18 5.5v9z" })));
 };
-exports.DownloadPDFIcon = DownloadPDFIcon;
+exports.PrintPDFIcon = PrintPDFIcon;

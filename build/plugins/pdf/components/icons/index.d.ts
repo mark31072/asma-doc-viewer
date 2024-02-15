@@ -7,4 +7,4 @@ export declare const ZoomInPDFIcon: (props: IIconProps) => JSX.Element;
 export declare const ZoomOutPDFIcon: (props: IIconProps) => JSX.Element;
 export declare const ResetZoomPDFIcon: (props: IIconProps) => JSX.Element;
 export declare const TogglePaginationPDFIcon: (props: IIconProps) => JSX.Element;
-export declare const DownloadPDFIcon: (props: IIconProps) => JSX.Element;
+export declare const PrintPDFIcon: (props: IIconProps) => JSX.Element;
