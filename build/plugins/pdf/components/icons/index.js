@@ -73,7 +73,7 @@ var TogglePaginationPDFIcon = function (props) {
 exports.TogglePaginationPDFIcon = TogglePaginationPDFIcon;
 var PrintPDFIcon = function (props) {
     var color = props.color, size = props.size, reverse = props.reverse;
-    return (react_1.default.createElement("svg", { width: size || "100%", height: size || "100%", style: { transform: "".concat(reverse ? "rotate(180deg)" : "") }, id: "Layer_1", viewBox: "0 0 24 24" },
-        react_1.default.createElement("path", { fill: color || "#aaa", d: "M16.5 7.5L13 4 9.5 7.5M14 2h-4M7.5 10.5h9a1.5 1.5 0 0 0 1.5-1.5V6A1.5 1.5 0 0 0 16.5 4h-9A1.5 1.5 0 0 0 6 5.5V9A1.5 1.5 0 0 0 7.5 10.5zM18 14.5A3.5 3.5 0 0 1 14.5 18h-9A3.5 3.5 0 0 1 2 14.5v-9A3.5 3.5 0 0 1 5.5 2h9A3.5 3.5 0 0 1 18 5.5v9z" })));
+    return (react_1.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: size || "100%", height: size || "100%", style: { transform: "".concat(reverse ? "rotate(180deg)" : "") }, id: "Layer_1", viewBox: "0 0 512 512" },
+        react_1.default.createElement("path", { d: "M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zM432 248a24 24 0 1 1 0 48 24 24 0 1 1 0-48z" })));
 };
 exports.PrintPDFIcon = PrintPDFIcon;
