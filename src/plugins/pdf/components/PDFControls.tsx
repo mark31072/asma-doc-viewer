@@ -39,9 +39,8 @@ const PDFControls: FC<{}> = () => {
    
     <ControlButton
         id="pdf-print"
-        
       >
-         <PrintPDFIcon color="#000" size="75%" />
+         <DownloadPDFIcon color="#000" size="75%" />
       </ControlButton>
 
       <ControlButton

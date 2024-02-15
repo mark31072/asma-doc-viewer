@@ -46,7 +46,7 @@ var PDFControls = function () {
         (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) && (react_1.default.createElement(DownloadButton, { id: "pdf-download", href: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, download: (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileName) || (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.uri) },
             react_1.default.createElement(icons_1.DownloadPDFIcon, { color: "#000", size: "75%" }))),
         react_1.default.createElement(ControlButton, { id: "pdf-print" },
-            react_1.default.createElement(icons_1.PrintPDFIcon, { color: "#000", size: "75%" })),
+            react_1.default.createElement(icons_1.DownloadPDFIcon, { color: "#000", size: "75%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-out", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel - 0.1)); } },
             react_1.default.createElement(icons_1.ZoomOutPDFIcon, { color: "#000", size: "80%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-in", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel + 0.1)); } },
