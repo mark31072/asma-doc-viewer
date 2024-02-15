@@ -53,6 +53,7 @@ const PDFNavArrow = (props: IIconProps) => {
     </svg>
   );
 };
+
 export const DownloadPDFIcon = (props: IIconProps) => {
   const { color, size, reverse } = props;
   return (
@@ -150,7 +151,7 @@ export const TogglePaginationPDFIcon = (props: IIconProps) => {
   );
 };
 
-export const DownloadPDFIcon = (props: IIconProps) => {
+export const PrintPDFIcon = (props: IIconProps) => {
   const { color, size, reverse } = props;
   return (
     <svg
@@ -161,12 +162,8 @@ export const DownloadPDFIcon = (props: IIconProps) => {
       viewBox="0 0 24 24"
     >
       <path
-        d="M20.57,9.43A8,8,0,0,0,5.26,10,5,5,0,1,0,5,20h5V18H5a3,3,0,0,1,0-6,3.1,3.1,0,0,1,.79.12l1.12.31.14-1.15a6,6,0,0,1,11.74-.82l.15.54.54.16A3.46,3.46,0,0,1,22,14.5,3.5,3.5,0,0,1,18.5,18H16v2h2.5A5.48,5.48,0,0,0,20.57,9.43Z"
         fill={color || "#aaa"}
-      />
-      <polygon
-        points="12 11 12 15.59 10.71 14.29 9.29 15.71 13 19.41 16.71 15.71 15.29 14.29 14 15.59 14 11 12 11"
-        fill={color || "#aaa"}
+        d="M16.5 7.5L13 4 9.5 7.5M14 2h-4M7.5 10.5h9a1.5 1.5 0 0 0 1.5-1.5V6A1.5 1.5 0 0 0 16.5 4h-9A1.5 1.5 0 0 0 6 5.5V9A1.5 1.5 0 0 0 7.5 10.5zM18 14.5A3.5 3.5 0 0 1 14.5 18h-9A3.5 3.5 0 0 1 2 14.5v-9A3.5 3.5 0 0 1 5.5 2h9A3.5 3.5 0 0 1 18 5.5v9z"
       />
     </svg>
   );
