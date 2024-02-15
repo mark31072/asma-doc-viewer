@@ -35,6 +35,13 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
+   
+    <ControlButton
+        id="pdf-print"
+        
+      >
+        <ZoomOutPDFIcon color="#000" size="80%" />
+      </ControlButton>
 
       <ControlButton
         id="pdf-zoom-out"
