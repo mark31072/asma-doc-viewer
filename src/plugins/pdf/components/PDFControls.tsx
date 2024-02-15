@@ -40,7 +40,7 @@ const PDFControls: FC<{}> = () => {
         id="pdf-print"
         
       >
-        <ZoomOutPDFIcon color="#000" size="80%" />
+        print 
       </ControlButton>
 
       <ControlButton
