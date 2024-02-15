@@ -7,6 +7,7 @@ import { setPDFPaginated, setZoomLevel } from "../state/actions";
 import { initialPDFState } from "../state/reducer";
 import {
   DownloadPDFIcon,
+  PrintPDFIcon,
   ResetZoomPDFIcon,
   TogglePaginationPDFIcon,
   ZoomInPDFIcon,
