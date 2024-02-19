@@ -41,11 +41,28 @@ var PDFPagination_1 = __importDefault(require("./PDFPagination"));
 var PDFControls = function () {
     var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
+    var handlePrint = function () {
+        var _a, _b;
+        var iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        var iframeDoc = iframe.contentDocument || ((_a = iframe.contentWindow) === null || _a === void 0 ? void 0 : _a.document);
+        if (iframeDoc) {
+            // Use type assertion to treat fileData as string
+            var fileContent = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
+            iframeDoc.body.innerHTML = fileContent || '';
+            (_b = iframe.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
+            // Cleanup: remove the iframe after printing
+            iframe.onload = function () {
+                document.body.removeChild(iframe);
+            };
+        }
+    };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
         (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) && (react_1.default.createElement(DownloadButton, { id: "pdf-download", href: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, download: (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileName) || (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.uri) },
             react_1.default.createElement(icons_1.DownloadPDFIcon, { color: "#000", size: "75%" }))),
-        react_1.default.createElement(ControlButton, { id: "pdf-print", onMouseDown: function () { return window.print(); } },
+        react_1.default.createElement(ControlButton, { id: "pdf-print", onClick: handlePrint },
             react_1.default.createElement(icons_1.PrintPDFIcon, { color: "#000", size: "65%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-out", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel - 0.1)); } },
             react_1.default.createElement(icons_1.ZoomOutPDFIcon, { color: "#000", size: "80%" })),

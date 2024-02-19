@@ -23,6 +23,28 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
+  const handlePrint = () => {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+  
+    document.body.appendChild(iframe);
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+  
+    if (iframeDoc) {
+      // Use type assertion to treat fileData as string
+      const fileContent = currentDocument?.fileData as string;
+  
+      iframeDoc.body.innerHTML = fileContent || '';
+  
+      iframe.contentWindow?.print();
+  
+      // Cleanup: remove the iframe after printing
+      iframe.onload = () => {
+        document.body.removeChild(iframe);
+      };
+    }
+  };
+
   return (
     <Container id="pdf-controls">
       {paginated && numPages > 1 && <PDFPagination />}
@@ -39,7 +61,7 @@ const PDFControls: FC<{}> = () => {
    
     <ControlButton
         id="pdf-print"
-        onMouseDown={() =>  window.print()}
+        onClick={handlePrint}
       >
          <PrintPDFIcon color="#000" size="65%" />
       </ControlButton>
