@@ -25,27 +25,30 @@ const PDFControls: FC<{}> = () => {
 
   const handlePrint = () => {
     console.log('Printing...');
-    
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
   
-    document.body.appendChild(iframe);
-  
+    const printWindow = window.open();
     const fileData = currentDocument?.fileData as string;
-    iframe.src = fileData;
+    
+    printWindow?.document.write(`
+      <html>
+        <head>
+          <title>Print</title>
+        </head>
+        <body>
+          <embed width="100%" height="100%" type="application/pdf" src="${fileData}" />
+        </body>
+      </html>
+    `);
   
-    console.log('iframe.src:', iframe.src);
+    printWindow?.document.close();
+    printWindow?.print();
   
-    iframe.contentWindow?.print();
-  
-    console.log('Print dialog should be shown.');
-  
-    // Cleanup: remove the iframe after a delay (after the print dialog is shown)
+    // Close the print window after printing
     setTimeout(() => {
-      document.body.removeChild(iframe);
-      console.log('Cleanup: iframe removed.');
+      printWindow?.close();
     }, 1000);
   }
+  
   
 
   return (

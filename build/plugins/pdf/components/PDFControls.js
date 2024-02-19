@@ -42,20 +42,15 @@ var PDFControls = function () {
     var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
-        var _a;
         console.log('Printing...');
-        var iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
+        var printWindow = window.open();
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
-        iframe.src = fileData;
-        console.log('iframe.src:', iframe.src);
-        (_a = iframe.contentWindow) === null || _a === void 0 ? void 0 : _a.print();
-        console.log('Print dialog should be shown.');
-        // Cleanup: remove the iframe after a delay (after the print dialog is shown)
+        printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.write("\n      <html>\n        <head>\n          <title>Print</title>\n        </head>\n        <body>\n          <embed width=\"100%\" height=\"100%\" type=\"application/pdf\" src=\"".concat(fileData, "\" />\n        </body>\n      </html>\n    "));
+        printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.close();
+        printWindow === null || printWindow === void 0 ? void 0 : printWindow.print();
+        // Close the print window after printing
         setTimeout(function () {
-            document.body.removeChild(iframe);
-            console.log('Cleanup: iframe removed.');
+            printWindow === null || printWindow === void 0 ? void 0 : printWindow.close();
         }, 1000);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
