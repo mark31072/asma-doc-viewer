@@ -42,18 +42,23 @@ var PDFControls = function () {
     var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
-        var _a;
+        var _a, _b;
         var iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         document.body.appendChild(iframe);
-        var fileContent = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
-        var dataUri = "data:application/pdf;base64,".concat(fileContent);
-        iframe.src = dataUri;
-        (_a = iframe.contentWindow) === null || _a === void 0 ? void 0 : _a.print();
-        // Cleanup: remove the iframe after printing
-        iframe.onload = function () {
-            document.body.removeChild(iframe);
-        };
+        var iframeDoc = iframe.contentDocument || ((_a = iframe.contentWindow) === null || _a === void 0 ? void 0 : _a.document);
+        console.log("here is curent doc ");
+        console.log(currentDocument);
+        if (iframeDoc) {
+            // Use type assertion to treat fileData as string
+            var fileContent = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
+            iframeDoc.body.innerHTML = fileContent || '';
+            (_b = iframe.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
+            // Cleanup: remove the iframe after printing
+            iframe.onload = function () {
+                document.body.removeChild(iframe);
+            };
+        }
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
