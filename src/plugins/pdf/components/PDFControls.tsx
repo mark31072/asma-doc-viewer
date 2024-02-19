@@ -24,6 +24,8 @@ const PDFControls: FC<{}> = () => {
   const currentDocument = mainState?.currentDocument || null;
 
   const handlePrint = () => {
+    console.log('Printing...');
+    
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
   
@@ -32,13 +34,19 @@ const PDFControls: FC<{}> = () => {
     const fileData = currentDocument?.fileData as string;
     iframe.src = fileData;
   
+    console.log('iframe.src:', iframe.src);
+  
     iframe.contentWindow?.print();
   
-    // Cleanup: remove the iframe after printing
-    iframe.onload = () => {
+    console.log('Print dialog should be shown.');
+  
+    // Cleanup: remove the iframe after a delay (after the print dialog is shown)
+    setTimeout(() => {
       document.body.removeChild(iframe);
-    };
+      console.log('Cleanup: iframe removed.');
+    }, 1000);
   }
+  
 
   return (
     <Container id="pdf-controls">

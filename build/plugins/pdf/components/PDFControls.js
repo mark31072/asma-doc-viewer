@@ -43,16 +43,20 @@ var PDFControls = function () {
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
         var _a;
+        console.log('Printing...');
         var iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         document.body.appendChild(iframe);
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
         iframe.src = fileData;
+        console.log('iframe.src:', iframe.src);
         (_a = iframe.contentWindow) === null || _a === void 0 ? void 0 : _a.print();
-        // Cleanup: remove the iframe after printing
-        iframe.onload = function () {
+        console.log('Print dialog should be shown.');
+        // Cleanup: remove the iframe after a delay (after the print dialog is shown)
+        setTimeout(function () {
             document.body.removeChild(iframe);
-        };
+            console.log('Cleanup: iframe removed.');
+        }, 1000);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
