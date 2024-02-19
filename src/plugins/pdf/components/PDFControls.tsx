@@ -28,25 +28,17 @@ const PDFControls: FC<{}> = () => {
     iframe.style.display = 'none';
   
     document.body.appendChild(iframe);
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
   
-    console.log("here is curent doc ")
-    console.log(currentDocument)
-
-    if (iframeDoc) {
-      // Use type assertion to treat fileData as string
-      const fileContent = currentDocument?.fileData as string;
+    const fileData = currentDocument?.fileData as string;
+    iframe.src = fileData;
   
-      iframeDoc.body.innerHTML = fileContent || '';
+    iframe.contentWindow?.print();
   
-      iframe.contentWindow?.print();
-  
-      // Cleanup: remove the iframe after printing
-      iframe.onload = () => {
-        document.body.removeChild(iframe);
-      };
-    }
-  };
+    // Cleanup: remove the iframe after printing
+    iframe.onload = () => {
+      document.body.removeChild(iframe);
+    };
+  }
 
   return (
     <Container id="pdf-controls">
