@@ -23,33 +23,32 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
+  const printPdf = function (url: string) {
+    var iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+  
+    iframe.style.display = 'none';
+    iframe.onload = function() {
+      setTimeout(function() {
+        iframe.focus();
+  
+        // Check if contentWindow is not null before accessing print
+        if (iframe.contentWindow) {
+          iframe.contentWindow.print();
+        } else {
+          console.error('contentWindow is null');
+        }
+      }, 1);
+    };
+  
+    iframe.src = url;
+  };
+  
   const handlePrint = () => {
     console.log('Printing...');
   
-    const printWindow = window.open();
     const fileData = currentDocument?.fileData as string;
-  
-    // Wait for the window to finish loading before printing
-    printWindow?.addEventListener('load', () => {
-      printWindow?.document.write(`
-        <html>
-          <head>
-            <title>Print</title>
-          </head>
-          <body>
-            <embed width="100%" height="100%" type="application/pdf" src="${fileData}" />
-          </body>
-        </html>
-      `);
-  
-      printWindow?.document.close();
-      printWindow?.print();
-  
-      // Close the print window after printing
-      setTimeout(() => {
-        printWindow?.close();
-      }, 1000);
-    });
+    printPdf(fileData);
   };
   
   
