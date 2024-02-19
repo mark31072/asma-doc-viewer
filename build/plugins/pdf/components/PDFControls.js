@@ -45,13 +45,16 @@ var PDFControls = function () {
         console.log('Printing...');
         var printWindow = window.open();
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
-        printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.write("\n      <html>\n        <head>\n          <title>Print</title>\n        </head>\n        <body>\n          <embed width=\"100%\" height=\"100%\" type=\"application/pdf\" src=\"".concat(fileData, "\" />\n        </body>\n      </html>\n    "));
-        printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.close();
-        printWindow === null || printWindow === void 0 ? void 0 : printWindow.print();
-        // Close the print window after printing
-        setTimeout(function () {
-            printWindow === null || printWindow === void 0 ? void 0 : printWindow.close();
-        }, 1000);
+        // Wait for the window to finish loading before printing
+        printWindow === null || printWindow === void 0 ? void 0 : printWindow.addEventListener('load', function () {
+            printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.write("\n        <html>\n          <head>\n            <title>Print</title>\n          </head>\n          <body>\n            <embed width=\"100%\" height=\"100%\" type=\"application/pdf\" src=\"".concat(fileData, "\" />\n          </body>\n        </html>\n      "));
+            printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.close();
+            printWindow === null || printWindow === void 0 ? void 0 : printWindow.print();
+            // Close the print window after printing
+            setTimeout(function () {
+                printWindow === null || printWindow === void 0 ? void 0 : printWindow.close();
+            }, 1000);
+        });
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),

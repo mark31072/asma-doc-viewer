@@ -28,26 +28,29 @@ const PDFControls: FC<{}> = () => {
   
     const printWindow = window.open();
     const fileData = currentDocument?.fileData as string;
-    
-    printWindow?.document.write(`
-      <html>
-        <head>
-          <title>Print</title>
-        </head>
-        <body>
-          <embed width="100%" height="100%" type="application/pdf" src="${fileData}" />
-        </body>
-      </html>
-    `);
   
-    printWindow?.document.close();
-    printWindow?.print();
+    // Wait for the window to finish loading before printing
+    printWindow?.addEventListener('load', () => {
+      printWindow?.document.write(`
+        <html>
+          <head>
+            <title>Print</title>
+          </head>
+          <body>
+            <embed width="100%" height="100%" type="application/pdf" src="${fileData}" />
+          </body>
+        </html>
+      `);
   
-    // Close the print window after printing
-    setTimeout(() => {
-      printWindow?.close();
-    }, 1000);
-  }
+      printWindow?.document.close();
+      printWindow?.print();
+  
+      // Close the print window after printing
+      setTimeout(() => {
+        printWindow?.close();
+      }, 1000);
+    });
+  };
   
   
 
