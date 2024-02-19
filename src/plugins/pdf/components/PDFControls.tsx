@@ -39,8 +39,9 @@ const PDFControls: FC<{}> = () => {
    
     <ControlButton
         id="pdf-print"
+        onMouseDown={() =>  window.print()}
       >
-         <PrintPDFIcon color="#000" size="75%" />
+         <PrintPDFIcon color="#000" size="65%" />
       </ControlButton>
 
       <ControlButton
