@@ -22,27 +22,24 @@ const PDFControls: FC<{}> = () => {
   } = useContext(PDFContext);
 
   const currentDocument = mainState?.currentDocument || null;
-
+  
   const handlePrint = () => {
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
   
     document.body.appendChild(iframe);
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
   
-    if (iframeDoc) {
-      // Use type assertion to treat fileData as string
-      const fileContent = currentDocument?.fileData as string;
+    const fileContent = currentDocument?.fileData as string;
+    const dataUri = `data:application/pdf;base64,${fileContent}`;
   
-      iframeDoc.body.innerHTML = fileContent || '';
+    iframe.src = dataUri;
   
-      iframe.contentWindow?.print();
+    iframe.contentWindow?.print();
   
-      // Cleanup: remove the iframe after printing
-      iframe.onload = () => {
-        document.body.removeChild(iframe);
-      };
-    }
+    // Cleanup: remove the iframe after printing
+    iframe.onload = () => {
+      document.body.removeChild(iframe);
+    };
   };
 
   return (
