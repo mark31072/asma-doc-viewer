@@ -59,27 +59,37 @@ var PDFControls = function () {
     // };
     var handlePrint = function () {
         if (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) {
-            // Convert base64 to Blob
-            var byteCharacters = atob(currentDocument.fileData);
-            var byteNumbers = new Array(byteCharacters.length);
-            for (var i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            console.log(currentDocument);
+            console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
+            try {
+                // Trim and decode base64 string
+                var byteCharacters = atob(currentDocument.fileData.toString().trim());
+                // Convert byte characters to array
+                var byteNumbers = new Array(byteCharacters.length);
+                for (var i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                // Create Blob from array
+                var byteArray = new Uint8Array(byteNumbers);
+                var blob = new Blob([byteArray], { type: 'application/pdf' });
+                // Create data URL
+                var dataUrl = URL.createObjectURL(blob);
+                // Open a new window for printing
+                var printWindow_1 = window.open(dataUrl, '_blank');
+                if (printWindow_1) {
+                    printWindow_1.onload = function () {
+                        // Trigger print dialog
+                        printWindow_1.print();
+                    };
+                }
+                else {
+                    // Handle pop-up blocker
+                    alert('Pop-up blocker may be preventing the print dialog. Please allow pop-ups and try again.');
+                }
             }
-            var byteArray = new Uint8Array(byteNumbers);
-            var blob = new Blob([byteArray], { type: 'application/pdf' });
-            // Create a data URL
-            var dataUrl = URL.createObjectURL(blob);
-            // Open a new window for printing
-            var printWindow_1 = window.open(dataUrl, '_blank');
-            if (printWindow_1) {
-                printWindow_1.onload = function () {
-                    // Trigger print dialog
-                    printWindow_1.print();
-                };
-            }
-            else {
-                // Handle pop-up blocker
-                alert('Pop-up blocker may be preventing the print dialog. Please allow pop-ups and try again.');
+            catch (error) {
+                console.error("Base64 decoding/printing error:", error);
+                // Handle the error as needed (e.g., show an error message to the user)
             }
         }
     };

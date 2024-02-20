@@ -50,28 +50,39 @@ const PDFControls: FC<{}> = () => {
   
   const handlePrint = () => {
     if (currentDocument?.fileData) {
-      // Convert base64 to Blob
-      const byteCharacters = atob(currentDocument.fileData as string);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/pdf' });
-
-      // Create a data URL
-      const dataUrl = URL.createObjectURL(blob);
-
-      // Open a new window for printing
-      const printWindow = window.open(dataUrl, '_blank');
-      if (printWindow) {
-        printWindow.onload = () => {
-          // Trigger print dialog
-          printWindow.print();
-        };
-      } else {
-        // Handle pop-up blocker
-        alert('Pop-up blocker may be preventing the print dialog. Please allow pop-ups and try again.');
+      console.log(currentDocument)
+    console.log(currentDocument?.fileData)
+      try {
+        // Trim and decode base64 string
+        const byteCharacters = atob(currentDocument.fileData.toString().trim());
+  
+        // Convert byte characters to array
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+  
+        // Create Blob from array
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+  
+        // Create data URL
+        const dataUrl = URL.createObjectURL(blob);
+  
+        // Open a new window for printing
+        const printWindow = window.open(dataUrl, '_blank');
+        if (printWindow) {
+          printWindow.onload = () => {
+            // Trigger print dialog
+            printWindow.print();
+          };
+        } else {
+          // Handle pop-up blocker
+          alert('Pop-up blocker may be preventing the print dialog. Please allow pop-ups and try again.');
+        }
+      } catch (error) {
+        console.error("Base64 decoding/printing error:", error);
+        // Handle the error as needed (e.g., show an error message to the user)
       }
     }
   };
