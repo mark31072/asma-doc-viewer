@@ -66,14 +66,9 @@ const PDFControls: FC<{}> = () => {
       <ControlButton id="pdf-print" onClick={handlePrint}>
         <PrintPDFIcon color="#000" size="65%" />
       </ControlButton>
+      
+      <iframe src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
 
-   
-    {/* <ControlButton
-        id="pdf-print"
-        onClick={handlePrint}
-      >
-         <PrintPDFIcon color="#000" size="65%" />
-      </ControlButton> */}
 
       <ControlButton
         id="pdf-zoom-out"
