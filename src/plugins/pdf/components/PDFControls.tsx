@@ -62,6 +62,7 @@ const PDFControls: FC<{}> = () => {
   //   return false;
   // };
   const handlePrint = async () => {
+    console.log(currentDocument)
     const fileData = currentDocument?.fileData || "";
   
     const pdfBlob = new Blob([fileData], { type: "application/pdf" });

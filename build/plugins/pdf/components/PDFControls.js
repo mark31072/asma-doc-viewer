@@ -104,6 +104,7 @@ var PDFControls = function () {
     var handlePrint = function () { return __awaiter(void 0, void 0, void 0, function () {
         var fileData, pdfBlob, url;
         return __generator(this, function (_a) {
+            console.log(currentDocument);
             fileData = (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) || "";
             pdfBlob = new Blob([fileData], { type: "application/pdf" });
             url = URL.createObjectURL(pdfBlob);
