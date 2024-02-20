@@ -23,32 +23,25 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
-  const printPdf = function (url: string) {
-    var iframe = document.createElement('iframe');
-    document.body.appendChild(iframe);
-  
-    iframe.style.display = 'none';
-    iframe.onload = function() {
-      setTimeout(function() {
-        iframe.focus();
-  
-        // Check if contentWindow is not null before accessing print
-        if (iframe.contentWindow) {
-          iframe.contentWindow.print();
-        } else {
-          console.error('contentWindow is null');
-        }
-      }, 1);
-    };
-  
-    iframe.src = url;
-  };
-  
   const handlePrint = () => {
+    console.log("here is doc ", currentDocument)
     console.log('Printing...');
   
     const fileData = currentDocument?.fileData as string;
-    printPdf(fileData);
+  
+    // Create a new window and load the PDF data into it
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`<iframe src="${fileData}" style="width:100%;height:100%;"></iframe>`);
+      printWindow.document.close();
+  
+      // Wait for the iframe to load before triggering the print
+      printWindow.onload = function () {
+        printWindow.print();
+      };
+    } else {
+      console.error('Unable to open a new window for printing.');
+    }
   };
   
   

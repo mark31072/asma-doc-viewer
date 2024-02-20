@@ -41,28 +41,23 @@ var PDFPagination_1 = __importDefault(require("./PDFPagination"));
 var PDFControls = function () {
     var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
-    var printPdf = function (url) {
-        var iframe = document.createElement('iframe');
-        document.body.appendChild(iframe);
-        iframe.style.display = 'none';
-        iframe.onload = function () {
-            setTimeout(function () {
-                iframe.focus();
-                // Check if contentWindow is not null before accessing print
-                if (iframe.contentWindow) {
-                    iframe.contentWindow.print();
-                }
-                else {
-                    console.error('contentWindow is null');
-                }
-            }, 1);
-        };
-        iframe.src = url;
-    };
     var handlePrint = function () {
+        console.log("here is doc ", currentDocument);
         console.log('Printing...');
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
-        printPdf(fileData);
+        // Create a new window and load the PDF data into it
+        var printWindow = window.open('', '_blank');
+        if (printWindow) {
+            printWindow.document.write("<iframe src=\"".concat(fileData, "\" style=\"width:100%;height:100%;\"></iframe>"));
+            printWindow.document.close();
+            // Wait for the iframe to load before triggering the print
+            printWindow.onload = function () {
+                printWindow.print();
+            };
+        }
+        else {
+            console.error('Unable to open a new window for printing.');
+        }
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
