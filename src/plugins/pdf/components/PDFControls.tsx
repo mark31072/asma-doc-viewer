@@ -23,41 +23,31 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
   const [printModalOpen, setPrintModalOpen] = useState(false);
-  
+
   const handlePrint = () => {
-    console.log("here is doc ", currentDocument)
     console.log('Printing...');
 
     const fileData = currentDocument?.fileData as string;
-    setPrintModalOpen(true);
+
+    // Create an iframe dynamically
+    const printFrame = document.createElement('iframe');
+    printFrame.style.visibility = 'hidden';
+    printFrame.src = fileData;
+
+    // Append the iframe to the document body
+    document.body.appendChild(printFrame);
+
+    // Set focus and print the content
+    printFrame.contentWindow?.focus();
+    printFrame.contentWindow?.print();
+
+    // Remove the iframe after printing
+    document.body.removeChild(printFrame);
   };
 
   const closePrintModal = () => {
     setPrintModalOpen(false);
   };
-
-
-  // const handlePrint = () => {
-  //   console.log("here is doc ", currentDocument)
-  //   console.log('Printing...');
-  
-  //   const fileData = currentDocument?.fileData as string;
-  
-    
-  //   const printWindow = window.open('', '_blank');
-  //   if (printWindow) {
-  //     printWindow.document.write(`<iframe src="${fileData}" style="width:100%;height:100%;"></iframe>`);
-  //     printWindow.document.close();
-  
-     
-  //     printWindow.onload = function () {
-  //       printWindow.print();
-  //     };
-  //   } else {
-  //     console.error('Unable to open a new window for printing.');
-  //   }
-  // };
-  
   
 
   return (
@@ -73,17 +63,16 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
-      {printModalOpen && (
+     {printModalOpen && (
         <PrintModal>
-          {/* Render PDF preview here using currentDocument?.fileData */}
-          <iframe src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
-
-          <PrintButton onClick={window.print}>
-            <PrintPDFIcon color="#000" size="65%" />
-          </PrintButton>
-          <CloseButton onClick={closePrintModal}>Close</CloseButton>
+          <span>Loading...</span>
+          {/* You can add a loading indicator or any other content while waiting for the print */}
         </PrintModal>
       )}
+
+      <ControlButton id="pdf-print" onClick={handlePrint}>
+        <PrintPDFIcon color="#000" size="65%" />
+      </ControlButton>
 
       <ControlButton id="pdf-print" onClick={handlePrint}>
         <PrintPDFIcon color="#000" size="65%" />
