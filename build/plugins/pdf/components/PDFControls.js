@@ -68,21 +68,17 @@ var PDFControls = function () {
         }
         var blob = new Blob([fileData], { type: 'application/pdf' });
         var blobUrl = URL.createObjectURL(blob);
-        var printFrame = document.createElement('iframe');
-        printFrame.style.visibility = 'hidden';
-        printFrame.src = blobUrl;
-        // Wait for the iframe to fully load before printing
-        printFrame.onload = function () {
-            var _a, _b;
+        var printWindow = window.open(blobUrl, '_blank');
+        // Wait for the window to fully load before printing
+        printWindow === null || printWindow === void 0 ? void 0 : printWindow.addEventListener('load', function () {
             // Set focus and print the content
-            (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
-            (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
-            // Remove the iframe after printing
-            document.body.removeChild(printFrame);
+            printWindow === null || printWindow === void 0 ? void 0 : printWindow.focus();
+            printWindow === null || printWindow === void 0 ? void 0 : printWindow.print();
+            // Close the window after printing
+            printWindow === null || printWindow === void 0 ? void 0 : printWindow.close();
             // Revoke the Blob URL to free up resources
             URL.revokeObjectURL(blobUrl);
-        };
-        document.body.appendChild(printFrame);
+        });
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
