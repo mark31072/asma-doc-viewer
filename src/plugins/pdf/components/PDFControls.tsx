@@ -67,18 +67,21 @@ const PDFControls: FC<{}> = () => {
     printFrame.style.visibility = 'hidden';
     printFrame.src = blobUrl;
   
+    // Wait for the iframe to fully load before printing
+    printFrame.onload = () => {
+      // Set focus and print the content
+      printFrame.contentWindow?.focus();
+      printFrame.contentWindow?.print();
+  
+      // Remove the iframe after printing
+      document.body.removeChild(printFrame);
+  
+      // Revoke the Blob URL to free up resources
+      URL.revokeObjectURL(blobUrl);
+    };
+  
     document.body.appendChild(printFrame);
-  
-    // Set focus and print the content
-    printFrame.contentWindow?.focus();
-    printFrame.contentWindow?.print();
-  
-    // Remove the iframe after printing
-    document.body.removeChild(printFrame);
-  
-    // Revoke the Blob URL to free up resources
-    URL.revokeObjectURL(blobUrl);
-  }; 
+  };
 
   return (
     <Container id="pdf-controls">

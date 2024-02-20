@@ -58,7 +58,6 @@ var PDFControls = function () {
     //   document.body.removeChild(printFrame);
     // };
     var handlePrint = function () {
-        var _a, _b;
         console.log(currentDocument);
         console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
         console.log('Printing...');
@@ -72,14 +71,18 @@ var PDFControls = function () {
         var printFrame = document.createElement('iframe');
         printFrame.style.visibility = 'hidden';
         printFrame.src = blobUrl;
+        // Wait for the iframe to fully load before printing
+        printFrame.onload = function () {
+            var _a, _b;
+            // Set focus and print the content
+            (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
+            (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
+            // Remove the iframe after printing
+            document.body.removeChild(printFrame);
+            // Revoke the Blob URL to free up resources
+            URL.revokeObjectURL(blobUrl);
+        };
         document.body.appendChild(printFrame);
-        // Set focus and print the content
-        (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
-        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
-        // Remove the iframe after printing
-        document.body.removeChild(printFrame);
-        // Revoke the Blob URL to free up resources
-        URL.revokeObjectURL(blobUrl);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
