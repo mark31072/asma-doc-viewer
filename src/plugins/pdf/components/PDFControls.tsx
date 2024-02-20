@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useState } from "react";
 import styled from "styled-components";
 import { Button, LinkButton } from "../../../components/common";
 import { IStyledProps } from "../../../types";
@@ -22,27 +22,41 @@ const PDFControls: FC<{}> = () => {
   } = useContext(PDFContext);
 
   const currentDocument = mainState?.currentDocument || null;
-
+  const [printModalOpen, setPrintModalOpen] = useState(false);
+  
   const handlePrint = () => {
     console.log("here is doc ", currentDocument)
     console.log('Printing...');
-  
+
     const fileData = currentDocument?.fileData as string;
-  
-    // Create a new window and load the PDF data into it
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      printWindow.document.write(`<iframe src="${fileData}" style="width:100%;height:100%;"></iframe>`);
-      printWindow.document.close();
-  
-      // Wait for the iframe to load before triggering the print
-      printWindow.onload = function () {
-        printWindow.print();
-      };
-    } else {
-      console.error('Unable to open a new window for printing.');
-    }
+    setPrintModalOpen(true);
   };
+
+  const closePrintModal = () => {
+    setPrintModalOpen(false);
+  };
+
+
+  // const handlePrint = () => {
+  //   console.log("here is doc ", currentDocument)
+  //   console.log('Printing...');
+  
+  //   const fileData = currentDocument?.fileData as string;
+  
+    
+  //   const printWindow = window.open('', '_blank');
+  //   if (printWindow) {
+  //     printWindow.document.write(`<iframe src="${fileData}" style="width:100%;height:100%;"></iframe>`);
+  //     printWindow.document.close();
+  
+     
+  //     printWindow.onload = function () {
+  //       printWindow.print();
+  //     };
+  //   } else {
+  //     console.error('Unable to open a new window for printing.');
+  //   }
+  // };
   
   
 
@@ -59,13 +73,28 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
+      {printModalOpen && (
+        <PrintModal>
+          {/* Render PDF preview here using currentDocument?.fileData */}
+          <iframe src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
+
+          <PrintButton onClick={window.print}>
+            <PrintPDFIcon color="#000" size="65%" />
+          </PrintButton>
+          <CloseButton onClick={closePrintModal}>Close</CloseButton>
+        </PrintModal>
+      )}
+
+      <ControlButton id="pdf-print" onClick={handlePrint}>
+        <PrintPDFIcon color="#000" size="65%" />
+      </ControlButton>
    
-    <ControlButton
+    {/* <ControlButton
         id="pdf-print"
         onClick={handlePrint}
       >
          <PrintPDFIcon color="#000" size="65%" />
-      </ControlButton>
+      </ControlButton> */}
 
       <ControlButton
         id="pdf-zoom-out"
@@ -138,5 +167,48 @@ const DownloadButton = styled(LinkButton)`
   @media (max-width: 768px) {
     width: 25px;
     height: 25px;
+  }
+`;
+
+const PrintModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const PrintButton = styled(Button)`
+  background-color: #007bff; /* Blue color, you can change this */
+  color: #ffffff; /* White text, you can change this */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #0056b3; /* Darker blue on hover, you can change this */
+  }
+`;
+
+const CloseButton = styled(Button)`
+  background-color: #dc3545; /* Red color, you can change this */
+  color: #ffffff; /* White text, you can change this */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px; /* Adjust as needed */
+
+  &:hover {
+    background-color: #c82333; /* Darker red on hover, you can change this */
   }
 `;

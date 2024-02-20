@@ -39,30 +39,43 @@ var reducer_1 = require("../state/reducer");
 var icons_1 = require("./icons");
 var PDFPagination_1 = __importDefault(require("./PDFPagination"));
 var PDFControls = function () {
-    var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
+    var _a;
+    var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
+    var _d = (0, react_1.useState)(false), printModalOpen = _d[0], setPrintModalOpen = _d[1];
     var handlePrint = function () {
         console.log("here is doc ", currentDocument);
         console.log('Printing...');
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
-        // Create a new window and load the PDF data into it
-        var printWindow = window.open('', '_blank');
-        if (printWindow) {
-            printWindow.document.write("<iframe src=\"".concat(fileData, "\" style=\"width:100%;height:100%;\"></iframe>"));
-            printWindow.document.close();
-            // Wait for the iframe to load before triggering the print
-            printWindow.onload = function () {
-                printWindow.print();
-            };
-        }
-        else {
-            console.error('Unable to open a new window for printing.');
-        }
+        setPrintModalOpen(true);
     };
+    var closePrintModal = function () {
+        setPrintModalOpen(false);
+    };
+    // const handlePrint = () => {
+    //   console.log("here is doc ", currentDocument)
+    //   console.log('Printing...');
+    //   const fileData = currentDocument?.fileData as string;
+    //   const printWindow = window.open('', '_blank');
+    //   if (printWindow) {
+    //     printWindow.document.write(`<iframe src="${fileData}" style="width:100%;height:100%;"></iframe>`);
+    //     printWindow.document.close();
+    //     printWindow.onload = function () {
+    //       printWindow.print();
+    //     };
+    //   } else {
+    //     console.error('Unable to open a new window for printing.');
+    //   }
+    // };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
         (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) && (react_1.default.createElement(DownloadButton, { id: "pdf-download", href: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, download: (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileName) || (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.uri) },
             react_1.default.createElement(icons_1.DownloadPDFIcon, { color: "#000", size: "75%" }))),
+        printModalOpen && (react_1.default.createElement(PrintModal, null,
+            react_1.default.createElement("iframe", { src: (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString(), style: { width: "100%", height: "100%" } }),
+            react_1.default.createElement(PrintButton, { onClick: window.print },
+                react_1.default.createElement(icons_1.PrintPDFIcon, { color: "#000", size: "65%" })),
+            react_1.default.createElement(CloseButton, { onClick: closePrintModal }, "Close"))),
         react_1.default.createElement(ControlButton, { id: "pdf-print", onClick: handlePrint },
             react_1.default.createElement(icons_1.PrintPDFIcon, { color: "#000", size: "65%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-out", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel - 0.1)); } },
@@ -78,4 +91,7 @@ exports.default = PDFControls;
 var Container = styled_components_1.default.div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  display: flex;\n  position: sticky;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  justify-content: flex-end;\n  padding: 8px;\n  background-color: ", ";\n  box-shadow: 0px 2px 3px #00000033;\n\n  @media (max-width: 768px) {\n    padding: 6px;\n  }\n"], ["\n  display: flex;\n  position: sticky;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  justify-content: flex-end;\n  padding: 8px;\n  background-color: ", ";\n  box-shadow: 0px 2px 3px #00000033;\n\n  @media (max-width: 768px) {\n    padding: 6px;\n  }\n"])), function (props) { return props.theme.tertiary; });
 var ControlButton = (0, styled_components_1.default)(common_1.Button)(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  width: 30px;\n  height: 30px;\n  @media (max-width: 768px) {\n    width: 25px;\n    height: 25px;\n  }\n"], ["\n  width: 30px;\n  height: 30px;\n  @media (max-width: 768px) {\n    width: 25px;\n    height: 25px;\n  }\n"])));
 var DownloadButton = (0, styled_components_1.default)(common_1.LinkButton)(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  width: 30px;\n  height: 30px;\n  @media (max-width: 768px) {\n    width: 25px;\n    height: 25px;\n  }\n"], ["\n  width: 30px;\n  height: 30px;\n  @media (max-width: 768px) {\n    width: 25px;\n    height: 25px;\n  }\n"])));
-var templateObject_1, templateObject_2, templateObject_3;
+var PrintModal = styled_components_1.default.div(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n"], ["\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n"])));
+var PrintButton = (0, styled_components_1.default)(common_1.Button)(templateObject_5 || (templateObject_5 = __makeTemplateObject(["\n  background-color: #007bff; /* Blue color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n\n  &:hover {\n    background-color: #0056b3; /* Darker blue on hover, you can change this */\n  }\n"], ["\n  background-color: #007bff; /* Blue color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n\n  &:hover {\n    background-color: #0056b3; /* Darker blue on hover, you can change this */\n  }\n"])));
+var CloseButton = (0, styled_components_1.default)(common_1.Button)(templateObject_6 || (templateObject_6 = __makeTemplateObject(["\n  background-color: #dc3545; /* Red color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n  margin-top: 10px; /* Adjust as needed */\n\n  &:hover {\n    background-color: #c82333; /* Darker red on hover, you can change this */\n  }\n"], ["\n  background-color: #dc3545; /* Red color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n  margin-top: 10px; /* Adjust as needed */\n\n  &:hover {\n    background-color: #c82333; /* Darker red on hover, you can change this */\n  }\n"])));
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6;
