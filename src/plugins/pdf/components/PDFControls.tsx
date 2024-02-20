@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, LinkButton } from "../../../components/common";
 import { IStyledProps } from "../../../types";
@@ -23,31 +23,63 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
-  const handlePrint = () => {
-    console.log(currentDocument)
-    console.log(currentDocument?.fileData)
+  // const handlePrint = () => {
+  //   console.log(currentDocument)
+  //   console.log(currentDocument?.fileData)
     
-    console.log('Printing...');
+  //   console.log('Printing...');
 
-    const fileData = currentDocument?.fileData?.toString()
+  //   const fileData = currentDocument?.fileData?.toString()
 
    
-    const printFrame = document.createElement('iframe');
-    printFrame.style.visibility = 'hidden';
-    printFrame.src = "./test.pdf";
+  //   const printFrame = document.createElement('iframe');
+  //   printFrame.style.visibility = 'hidden';
+  //   printFrame.src = "./test.pdf";
 
     
-    document.body.appendChild(printFrame);
+  //   document.body.appendChild(printFrame);
 
-    // Set focus and print the content
-    printFrame.contentWindow?.focus();
-    printFrame.contentWindow?.print();
+  //   // Set focus and print the content
+  //   printFrame.contentWindow?.focus();
+  //   printFrame.contentWindow?.print();
 
-    // Remove the iframe after printing
-    document.body.removeChild(printFrame);
-  };
+  //   // Remove the iframe after printing
+  //   document.body.removeChild(printFrame);
+  // };
 
   
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleMessage = (event: { data: { action: string; }; }) => {
+    if (event.data.action === 'receipt-loaded') {
+      setIsLoading(false);
+    }
+  };
+
+  const printIframe = (id: string) => {
+    const iframe = document.frames
+      ? document.frames[id]
+      : document.getElementById(id);
+    const iframeWindow = iframe.contentWindow || iframe;
+
+    iframe.focus();
+    iframeWindow.print();
+
+    return false;
+  };
+
+  useEffect(() => {
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
+  const handlePrint = () => {
+    setIsLoading(true);
+    printIframe('receipt');
+  };
 
   return (
     <Container id="pdf-controls">
@@ -62,13 +94,14 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
+<iframe  id="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
 
-      <ControlButton id="pdf-print" onClick={handlePrint}>
-        <PrintPDFIcon color="#000" size="65%" />
+      <ControlButton id="pdf-print" onClick={()=> printIframe('receipt')}>
+      {isLoading ? 'Loading...' : 'Print Receipt'}
+        {/* <PrintPDFIcon color="#000" size="65%" /> */}
       </ControlButton>
       
-      <iframe src="./test.pdf" style={{ width: "100%", height: "100%" }} />
-
+      
 
       <ControlButton
         id="pdf-zoom-out"
