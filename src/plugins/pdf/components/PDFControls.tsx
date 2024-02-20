@@ -22,34 +22,29 @@ const PDFControls: FC<{}> = () => {
   } = useContext(PDFContext);
 
   const currentDocument = mainState?.currentDocument || null;
-  const [printModalOpen, setPrintModalOpen] = useState(false);
 
   const handlePrint = () => {
     console.log('Printing...');
-  
+
     const fileData = currentDocument?.fileData as string;
-  
+
     // Create an iframe dynamically
     const printFrame = document.createElement('iframe');
     printFrame.style.visibility = 'hidden';
-  
-    // Append a timestamp to prevent caching
-    const timestamp = new Date().getTime();
-    printFrame.src = fileData + '?timestamp=' + timestamp;
-  
+    printFrame.src = fileData;
+
     // Append the iframe to the document body
     document.body.appendChild(printFrame);
-  
-    // Wait for the document to load
-    printFrame.onload = function () {
-      printFrame.contentWindow?.focus();
-      printFrame.contentWindow?.print();
-      document.body.removeChild(printFrame);
-    };
-  
-    setPrintModalOpen(true);
+
+    // Set focus and print the content
+    printFrame.contentWindow?.focus();
+    printFrame.contentWindow?.print();
+
+    // Remove the iframe after printing
+    document.body.removeChild(printFrame);
   };
-  
+
+ 
 
   return (
     <Container id="pdf-controls">
@@ -64,20 +59,11 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
-     {printModalOpen && (
-        <PrintModal>
-          <span>Loading...</span>
-          {/* You can add a loading indicator or any other content while waiting for the print */}
-        </PrintModal>
-      )}
 
       <ControlButton id="pdf-print" onClick={handlePrint}>
         <PrintPDFIcon color="#000" size="65%" />
       </ControlButton>
 
-      <ControlButton id="pdf-print" onClick={handlePrint}>
-        <PrintPDFIcon color="#000" size="65%" />
-      </ControlButton>
    
     {/* <ControlButton
         id="pdf-print"
