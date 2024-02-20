@@ -42,24 +42,9 @@ var PDFControls = function () {
     var _a;
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
-    // const handlePrint = () => {
-    //   console.log(currentDocument)
-    //   console.log(currentDocument?.fileData)
-    //   console.log('Printing...');
-    //   const fileData = currentDocument?.fileData?.toString()
-    //   const printFrame = document.createElement('iframe');
-    //   printFrame.style.visibility = 'hidden';
-    //   printFrame.src = "./test.pdf";
-    //   document.body.appendChild(printFrame);
-    //   // Set focus and print the content
-    //   printFrame.contentWindow?.focus();
-    //   printFrame.contentWindow?.print();
-    //   // Remove the iframe after printing
-    //   document.body.removeChild(printFrame);
-    // };
+    var _d = (0, react_1.useState)(false), showPrintModal = _d[0], setShowPrintModal = _d[1];
+    var _e = (0, react_1.useState)(null), printDataUrl = _e[0], setPrintDataUrl = _e[1];
     var handlePrint = function () {
-        console.log(currentDocument);
-        console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
         if (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) {
             try {
                 // Verify content type
@@ -76,24 +61,26 @@ var PDFControls = function () {
                 var blob = new Blob([byteCharacters], { type: 'application/pdf' });
                 // Create data URL
                 var dataUrl = URL.createObjectURL(blob);
-                // Open a new window for printing
-                var printWindow_1 = window.open(dataUrl, '_blank');
-                if (printWindow_1) {
-                    printWindow_1.onload = function () {
-                        // Trigger print dialog
-                        printWindow_1.print();
-                    };
-                }
-                else {
-                    // Handle pop-up blocker
-                    alert('Pop-up blocker may be preventing the print dialog. Please allow pop-ups and try again.');
-                }
+                // Set the data URL in the state and show the print modal
+                setPrintDataUrl(dataUrl);
+                setShowPrintModal(true);
             }
             catch (error) {
                 console.error("Base64 decoding/printing error:", error);
                 // Handle the error as needed (e.g., show an error message to the user)
             }
         }
+    };
+    var handleClosePrintModal = function () {
+        // Hide the print modal
+        setShowPrintModal(false);
+    };
+    var PrintModal = function (_a) {
+        var dataUrl = _a.dataUrl, onClose = _a.onClose;
+        return (react_1.default.createElement(ModalOverlay, null,
+            react_1.default.createElement(ModalContent, null,
+                react_1.default.createElement("iframe", { src: dataUrl, style: { width: "100%", height: "100%" }, title: "Print Preview" }),
+                react_1.default.createElement(CloseButton, { onClick: onClose }, "Close"))));
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
@@ -109,7 +96,8 @@ var PDFControls = function () {
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-reset", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(reducer_1.initialPDFState.zoomLevel)); }, disabled: zoomLevel === reducer_1.initialPDFState.zoomLevel },
             react_1.default.createElement(icons_1.ResetZoomPDFIcon, { color: "#000", size: "70%" })),
         numPages > 1 && (react_1.default.createElement(ControlButton, { id: "pdf-toggle-pagination", onMouseDown: function () { return dispatch((0, actions_1.setPDFPaginated)(!paginated)); } },
-            react_1.default.createElement(icons_1.TogglePaginationPDFIcon, { color: "#000", size: "70%", reverse: paginated })))));
+            react_1.default.createElement(icons_1.TogglePaginationPDFIcon, { color: "#000", size: "70%", reverse: paginated }))),
+        showPrintModal && (react_1.default.createElement(PrintModal, { dataUrl: printDataUrl || "", onClose: handleClosePrintModal }))));
 };
 exports.default = PDFControls;
 var Container = styled_components_1.default.div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  display: flex;\n  position: sticky;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  justify-content: flex-end;\n  padding: 8px;\n  background-color: ", ";\n  box-shadow: 0px 2px 3px #00000033;\n\n  @media (max-width: 768px) {\n    padding: 6px;\n  }\n"], ["\n  display: flex;\n  position: sticky;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  justify-content: flex-end;\n  padding: 8px;\n  background-color: ", ";\n  box-shadow: 0px 2px 3px #00000033;\n\n  @media (max-width: 768px) {\n    padding: 6px;\n  }\n"])), function (props) { return props.theme.tertiary; });
@@ -118,4 +106,6 @@ var DownloadButton = (0, styled_components_1.default)(common_1.LinkButton)(templ
 var PrintModal = styled_components_1.default.div(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n"], ["\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n"])));
 var PrintButton = (0, styled_components_1.default)(common_1.Button)(templateObject_5 || (templateObject_5 = __makeTemplateObject(["\n  background-color: #007bff; /* Blue color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n\n  &:hover {\n    background-color: #0056b3; /* Darker blue on hover, you can change this */\n  }\n"], ["\n  background-color: #007bff; /* Blue color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n\n  &:hover {\n    background-color: #0056b3; /* Darker blue on hover, you can change this */\n  }\n"])));
 var CloseButton = (0, styled_components_1.default)(common_1.Button)(templateObject_6 || (templateObject_6 = __makeTemplateObject(["\n  background-color: #dc3545; /* Red color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n  margin-top: 10px; /* Adjust as needed */\n\n  &:hover {\n    background-color: #c82333; /* Darker red on hover, you can change this */\n  }\n"], ["\n  background-color: #dc3545; /* Red color, you can change this */\n  color: #ffffff; /* White text, you can change this */\n  padding: 10px 20px;\n  font-size: 16px;\n  cursor: pointer;\n  border: none;\n  border-radius: 5px;\n  margin-top: 10px; /* Adjust as needed */\n\n  &:hover {\n    background-color: #c82333; /* Darker red on hover, you can change this */\n  }\n"])));
-var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6;
+var ModalOverlay = styled_components_1.default.div(templateObject_7 || (templateObject_7 = __makeTemplateObject(["\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n"], ["\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n"])));
+var ModalContent = styled_components_1.default.div(templateObject_8 || (templateObject_8 = __makeTemplateObject(["\n  background-color: #fff;\n  padding: 20px;\n  max-width: 80%;\n  max-height: 80%;\n  overflow: auto;\n  position: relative;\n"], ["\n  background-color: #fff;\n  padding: 20px;\n  max-width: 80%;\n  max-height: 80%;\n  overflow: auto;\n  position: relative;\n"])));
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8;
