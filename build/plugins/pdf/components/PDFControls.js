@@ -43,23 +43,24 @@ var PDFControls = function () {
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var _c = (0, react_1.useState)(false), printModalOpen = _c[0], setPrintModalOpen = _c[1];
     var handlePrint = function () {
-        var _a, _b;
         console.log('Printing...');
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
         // Create an iframe dynamically
         var printFrame = document.createElement('iframe');
         printFrame.style.visibility = 'hidden';
-        printFrame.src = fileData;
+        // Append a timestamp to prevent caching
+        var timestamp = new Date().getTime();
+        printFrame.src = fileData + '?timestamp=' + timestamp;
         // Append the iframe to the document body
         document.body.appendChild(printFrame);
-        // Set focus and print the content
-        (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
-        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
-        // Remove the iframe after printing
-        document.body.removeChild(printFrame);
-    };
-    var closePrintModal = function () {
-        setPrintModalOpen(false);
+        // Wait for the document to load
+        printFrame.onload = function () {
+            var _a, _b;
+            (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
+            (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
+            document.body.removeChild(printFrame);
+        };
+        setPrintModalOpen(true);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
