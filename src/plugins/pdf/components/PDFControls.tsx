@@ -65,10 +65,15 @@ const PDFControls: FC<{}> = () => {
     const fileData = currentDocument?.fileData;
   
     if (fileData) {
-      console.log(currentDocument)
+      console.log(fileData);
+  
       try {
         // Print PDF using printJS
-        printJS({ printable: fileData, type: 'pdf', base64: false });
+        printJS({
+          printable: fileData, // Provide the base64-encoded PDF data directly
+          type: 'pdf',
+          base64: true,
+        });
       } catch (error) {
         console.error('Error printing the PDF:', error);
       }

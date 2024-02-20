@@ -68,10 +68,14 @@ var PDFControls = function () {
     var handlePrint = function () {
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
         if (fileData) {
-            console.log(currentDocument);
+            console.log(fileData);
             try {
                 // Print PDF using printJS
-                (0, print_js_1.default)({ printable: fileData, type: 'pdf', base64: false });
+                (0, print_js_1.default)({
+                    printable: fileData,
+                    type: 'pdf',
+                    base64: true,
+                });
             }
             catch (error) {
                 console.error('Error printing the PDF:', error);
