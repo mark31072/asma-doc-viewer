@@ -8,6 +8,9 @@ dependencies:
   pdfjs-dist:
     specifier: 2.4.456
     version: 2.4.456
+  print-js:
+    specifier: ^1.6.0
+    version: 1.6.0
   react-pdf:
     specifier: 5.0.0
     version: 5.0.0(react-dom@18.1.0)(react@18.1.0)(webpack@5.90.2)
@@ -8559,6 +8562,10 @@ packages:
       ansi-styles: 5.2.0
       react-is: 18.2.0
     dev: true
+
+  /print-js@1.6.0:
+    resolution: {integrity: sha512-BfnOIzSKbqGRtO4o0rnj/K3681BSd2QUrsIZy/+WdCIugjIswjmx3lDEZpXB2ruGf9d4b3YNINri81+J0FsBWg==}
+    dev: false
 
   /process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}

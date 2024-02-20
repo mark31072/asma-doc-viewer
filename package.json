@@ -1,6 +1,6 @@
 {
   "name": "asma-doc-viewer",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "description": "test",
   "author": "",
   "license": "ISC",
@@ -11,6 +11,7 @@
   "types": "build/index.d.ts",
   "dependencies": {
     "pdfjs-dist": "2.4.456",
+    "print-js": "^1.6.0",
     "react-pdf": "5.0.0",
     "styled-components": "^5.3.5"
   },

@@ -14,6 +14,7 @@ import {
   ZoomOutPDFIcon,
 } from "./icons";
 import PDFPagination from "./PDFPagination";
+import printJS from "print-js";
 
 const PDFControls: FC<{}> = () => {
   const {
@@ -51,14 +52,18 @@ const PDFControls: FC<{}> = () => {
  
  
 
-  const printIframe = (id: string) => {
-    const iframe = document.getElementById(id) as HTMLIFrameElement;
-    const iframeWindow = iframe.contentWindow || window;
+  // const printIframe = (id: string) => {
+  //   const iframe = document.getElementById(id) as HTMLIFrameElement;
+  //   const iframeWindow = iframe.contentWindow || window;
 
-    iframe.focus();
-    iframeWindow.print();
+  //   iframe.focus();
+  //   iframeWindow.print();
 
-    return false;
+  //   return false;
+  // };
+  const handlePrint = () => {
+    
+    printJS({ printable: currentDocument?.fileData?.toString(), type: 'pdf', base64: true });
   };
 
 
@@ -79,7 +84,7 @@ const PDFControls: FC<{}> = () => {
       )}
 <iframe  id="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
 
-      <ControlButton id="pdf-print" onClick={()=> printIframe('receipt')}>
+      <ControlButton id="pdf-print" onClick={handlePrint}>
      
          <PrintPDFIcon color="#000" size="65%" />
       </ControlButton>
