@@ -62,26 +62,14 @@ const PDFControls: FC<{}> = () => {
   //   return false;
   // };
   const handlePrint = async () => {
+    const fileData = currentDocument?.fileData || "";
+  
+    const pdfBlob = new Blob([fileData], { type: "application/pdf" });
+    const url = URL.createObjectURL(pdfBlob);
+    printJS(url);
+    window.open(url);
     
-    const fileData = currentDocument?.fileData;
-  
-    if (fileData) {
-      try {
-        const blob = new Blob([fileData]);
-  
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64Data = reader.result as string;
-          printJS({ printable: base64Data, type: 'pdf', base64: true });
-         
-        };
-  
-        reader.readAsDataURL(blob);
-      } catch (error) {
-        console.error('Error encoding the PDF:', error);
-       
-      }
-    }
+   
   };
 
 
