@@ -42,18 +42,18 @@ var PDFControls = function () {
     var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
-        var _a, _b;
+        var _a, _b, _c;
         console.log(currentDocument);
         console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
         console.log('Printing...');
-        var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
+        var fileData = (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString();
         var printFrame = document.createElement('iframe');
         printFrame.style.visibility = 'hidden';
-        printFrame.src = fileData;
+        printFrame.src = fileData || "";
         document.body.appendChild(printFrame);
         // Set focus and print the content
-        (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
-        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
+        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.focus();
+        (_c = printFrame.contentWindow) === null || _c === void 0 ? void 0 : _c.print();
         // Remove the iframe after printing
         document.body.removeChild(printFrame);
     };

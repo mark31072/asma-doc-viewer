@@ -29,12 +29,12 @@ const PDFControls: FC<{}> = () => {
     
     console.log('Printing...');
 
-    const fileData = currentDocument?.fileData as string;
+    const fileData = currentDocument?.fileData?.toString()
 
    
     const printFrame = document.createElement('iframe');
     printFrame.style.visibility = 'hidden';
-    printFrame.src = fileData;
+    printFrame.src = fileData || "";
 
     
     document.body.appendChild(printFrame);
