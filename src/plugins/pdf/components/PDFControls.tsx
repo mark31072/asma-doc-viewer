@@ -61,17 +61,18 @@ const PDFControls: FC<{}> = () => {
 
   //   return false;
   // };
-  const handlePrint = async () => {
-    console.log(currentDocument)
-   
-    
-    printJS({
-      printable: currentDocument?.fileData as string,
-      type: 'pdf',
-    });
-    
-    
-   
+  const handlePrint = () => {
+    const fileData = currentDocument?.fileData;
+  
+    if (fileData) {
+      console.log(currentDocument)
+      try {
+        // Print PDF using printJS
+        printJS({ printable: fileData, type: 'pdf', base64: false });
+      } catch (error) {
+        console.error('Error printing the PDF:', error);
+      }
+    }
   };
 
 
