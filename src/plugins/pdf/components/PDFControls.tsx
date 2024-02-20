@@ -23,61 +23,30 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
-  // const handlePrint = () => {
-  //   console.log(currentDocument)
-  //   console.log(currentDocument?.fileData)
+  const handlePrint = () => {
+    console.log(currentDocument)
+    console.log(currentDocument?.fileData)
     
-  //   console.log('Printing...');
+    console.log('Printing...');
 
-  //   const fileData = currentDocument?.fileData?.toString()
+    const fileData = currentDocument?.fileData?.toString()
 
    
-  //   const printFrame = document.createElement('iframe');
-  //   printFrame.style.visibility = 'hidden';
-  //   printFrame.src = fileData || "";
+    const printFrame = document.createElement('iframe');
+    printFrame.style.visibility = 'hidden';
+    printFrame.src = "./test.pdf";
 
     
-  //   document.body.appendChild(printFrame);
+    document.body.appendChild(printFrame);
 
-  //   // Set focus and print the content
-  //   printFrame.contentWindow?.focus();
-  //   printFrame.contentWindow?.print();
+    // Set focus and print the content
+    printFrame.contentWindow?.focus();
+    printFrame.contentWindow?.print();
 
-  //   // Remove the iframe after printing
-  //   document.body.removeChild(printFrame);
-  // };
-
-  const handlePrint = () => {
-    console.log(currentDocument);
-    console.log(currentDocument?.fileData);
-  
-    console.log('Printing...');
-  
-    const fileData = currentDocument?.fileData;
-  
-    if (!fileData) {
-      console.error('No file data available.');
-      return;
-    }
-  
-    const blob = new Blob([fileData], { type: 'application/pdf' });
-    const blobUrl = URL.createObjectURL(blob);
-  
-    const printWindow = window.open(blobUrl, '_blank');
-  
-    // Wait for the window to fully load before printing
-    printWindow?.addEventListener('load', () => {
-      // Set focus and print the content
-      printWindow?.focus();
-      printWindow?.print();
-  
-      // Close the window after printing
-      printWindow?.close();
-  
-      // Revoke the Blob URL to free up resources
-      URL.revokeObjectURL(blobUrl);
-    });
+    // Remove the iframe after printing
+    document.body.removeChild(printFrame);
   };
+
   
 
   return (
