@@ -102,17 +102,12 @@ var PDFControls = function () {
     //   return false;
     // };
     var handlePrint = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var fileData, pdfBlob, url;
         return __generator(this, function (_a) {
             console.log(currentDocument);
-            fileData = (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) || "";
-            pdfBlob = new Blob([fileData], { type: "application/pdf" });
-            url = URL.createObjectURL(pdfBlob);
             (0, print_js_1.default)({
-                printable: url,
+                printable: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData,
                 type: 'pdf',
             });
-            console.log(url);
             return [2 /*return*/];
         });
     }); };

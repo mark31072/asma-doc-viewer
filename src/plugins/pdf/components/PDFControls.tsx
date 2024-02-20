@@ -63,15 +63,13 @@ const PDFControls: FC<{}> = () => {
   // };
   const handlePrint = async () => {
     console.log(currentDocument)
-    const fileData = currentDocument?.fileData || "";
-  
-    const pdfBlob = new Blob([fileData], { type: "application/pdf" });
-    const url = URL.createObjectURL(pdfBlob);
+   
+    
     printJS({
-      printable: url,
+      printable: currentDocument?.fileData as string,
       type: 'pdf',
     });
-    console.log(url)
+    
     
    
   };
