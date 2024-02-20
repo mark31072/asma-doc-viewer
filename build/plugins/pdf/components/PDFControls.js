@@ -38,7 +38,6 @@ var actions_1 = require("../state/actions");
 var reducer_1 = require("../state/reducer");
 var icons_1 = require("./icons");
 var PDFPagination_1 = __importDefault(require("./PDFPagination"));
-var print_js_1 = __importDefault(require("print-js"));
 var PDFControls = function () {
     var _a;
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
@@ -58,27 +57,29 @@ var PDFControls = function () {
     //   // Remove the iframe after printing
     //   document.body.removeChild(printFrame);
     // };
-    // const printIframe = (id: string) => {
-    //   const iframe = document.getElementById(id) as HTMLIFrameElement;
-    //   const iframeWindow = iframe.contentWindow || window;
-    //   iframe.focus();
-    //   iframeWindow.print();
-    //   return false;
-    // };
     var handlePrint = function () {
-        var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
-        if (fileData) {
-            console.log(fileData);
-            try {
-                // Print PDF using printJS
-                (0, print_js_1.default)({
-                    printable: fileData,
-                    type: 'pdf',
-                    base64: true,
-                });
+        if (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) {
+            // Convert base64 to Blob
+            var byteCharacters = atob(currentDocument.fileData);
+            var byteNumbers = new Array(byteCharacters.length);
+            for (var i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
             }
-            catch (error) {
-                console.error('Error printing the PDF:', error);
+            var byteArray = new Uint8Array(byteNumbers);
+            var blob = new Blob([byteArray], { type: 'application/pdf' });
+            // Create a data URL
+            var dataUrl = URL.createObjectURL(blob);
+            // Open a new window for printing
+            var printWindow_1 = window.open(dataUrl, '_blank');
+            if (printWindow_1) {
+                printWindow_1.onload = function () {
+                    // Trigger print dialog
+                    printWindow_1.print();
+                };
+            }
+            else {
+                // Handle pop-up blocker
+                alert('Pop-up blocker may be preventing the print dialog. Please allow pop-ups and try again.');
             }
         }
     };

@@ -14,7 +14,6 @@ import {
   ZoomOutPDFIcon,
 } from "./icons";
 import PDFPagination from "./PDFPagination";
-import printJS from "print-js";
 
 const PDFControls: FC<{}> = () => {
   const {
@@ -49,38 +48,33 @@ const PDFControls: FC<{}> = () => {
   // };
 
   
- 
- 
-
-  // const printIframe = (id: string) => {
-  //   const iframe = document.getElementById(id) as HTMLIFrameElement;
-  //   const iframeWindow = iframe.contentWindow || window;
-
-  //   iframe.focus();
-  //   iframeWindow.print();
-
-  //   return false;
-  // };
   const handlePrint = () => {
-    const fileData = currentDocument?.fileData;
-  
-    if (fileData) {
-      console.log(fileData);
-  
-      try {
-        // Print PDF using printJS
-        printJS({
-          printable: fileData, // Provide the base64-encoded PDF data directly
-          type: 'pdf',
-          base64: true,
-        });
-      } catch (error) {
-        console.error('Error printing the PDF:', error);
+    if (currentDocument?.fileData) {
+      // Convert base64 to Blob
+      const byteCharacters = atob(currentDocument.fileData as string);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+      // Create a data URL
+      const dataUrl = URL.createObjectURL(blob);
+
+      // Open a new window for printing
+      const printWindow = window.open(dataUrl, '_blank');
+      if (printWindow) {
+        printWindow.onload = () => {
+          // Trigger print dialog
+          printWindow.print();
+        };
+      } else {
+        // Handle pop-up blocker
+        alert('Pop-up blocker may be preventing the print dialog. Please allow pop-ups and try again.');
       }
     }
   };
-
-
   return (
     <Container id="pdf-controls">
       {paginated && numPages > 1 && <PDFPagination />}
