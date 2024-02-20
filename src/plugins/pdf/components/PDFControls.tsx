@@ -48,19 +48,12 @@ const PDFControls: FC<{}> = () => {
   // };
 
   
-  const [isLoading, setIsLoading] = useState(true);
-
-  const handleMessage = (event: { data: { action: string; }; }) => {
-    if (event.data.action === 'receipt-loaded') {
-      setIsLoading(false);
-    }
-  };
+ 
+ 
 
   const printIframe = (id: string) => {
-    const iframe = document.frames
-      ? document.frames[id]
-      : document.getElementById(id);
-    const iframeWindow = iframe.contentWindow || iframe;
+    const iframe = document.getElementById(id) as HTMLIFrameElement;
+    const iframeWindow = iframe.contentWindow || window;
 
     iframe.focus();
     iframeWindow.print();
@@ -68,18 +61,8 @@ const PDFControls: FC<{}> = () => {
     return false;
   };
 
-  useEffect(() => {
-    window.addEventListener('message', handleMessage);
 
-    return () => {
-      window.removeEventListener('message', handleMessage);
-    };
-  }, []);
 
-  const handlePrint = () => {
-    setIsLoading(true);
-    printIframe('receipt');
-  };
 
   return (
     <Container id="pdf-controls">
@@ -97,8 +80,8 @@ const PDFControls: FC<{}> = () => {
 <iframe  id="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
 
       <ControlButton id="pdf-print" onClick={()=> printIframe('receipt')}>
-      {isLoading ? 'Loading...' : 'Print Receipt'}
-        {/* <PrintPDFIcon color="#000" size="65%" /> */}
+     
+         <PrintPDFIcon color="#000" size="65%" />
       </ControlButton>
       
       

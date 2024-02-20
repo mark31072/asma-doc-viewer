@@ -57,37 +57,20 @@ var PDFControls = function () {
     //   // Remove the iframe after printing
     //   document.body.removeChild(printFrame);
     // };
-    var _d = (0, react_1.useState)(true), isLoading = _d[0], setIsLoading = _d[1];
-    var handleMessage = function (event) {
-        if (event.data.action === 'receipt-loaded') {
-            setIsLoading(false);
-        }
-    };
     var printIframe = function (id) {
-        var iframe = document.frames
-            ? document.frames[id]
-            : document.getElementById(id);
-        var iframeWindow = iframe.contentWindow || iframe;
+        var iframe = document.getElementById(id);
+        var iframeWindow = iframe.contentWindow || window;
         iframe.focus();
         iframeWindow.print();
         return false;
-    };
-    (0, react_1.useEffect)(function () {
-        window.addEventListener('message', handleMessage);
-        return function () {
-            window.removeEventListener('message', handleMessage);
-        };
-    }, []);
-    var handlePrint = function () {
-        setIsLoading(true);
-        printIframe('receipt');
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
         (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) && (react_1.default.createElement(DownloadButton, { id: "pdf-download", href: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, download: (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileName) || (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.uri) },
             react_1.default.createElement(icons_1.DownloadPDFIcon, { color: "#000", size: "75%" }))),
         react_1.default.createElement("iframe", { id: "receipt", src: (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString(), style: { width: "100%", height: "100%" } }),
-        react_1.default.createElement(ControlButton, { id: "pdf-print", onClick: function () { return printIframe('receipt'); } }, isLoading ? 'Loading...' : 'Print Receipt'),
+        react_1.default.createElement(ControlButton, { id: "pdf-print", onClick: function () { return printIframe('receipt'); } },
+            react_1.default.createElement(icons_1.PrintPDFIcon, { color: "#000", size: "65%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-out", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel - 0.1)); } },
             react_1.default.createElement(icons_1.ZoomOutPDFIcon, { color: "#000", size: "80%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-in", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel + 0.1)); } },
