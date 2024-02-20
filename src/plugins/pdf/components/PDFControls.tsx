@@ -24,24 +24,25 @@ const PDFControls: FC<{}> = () => {
   const currentDocument = mainState?.currentDocument || null;
 
   const handlePrint = () => {
+    console.log(currentDocument)
+    console.log(currentDocument?.fileData)
     console.log('Printing...');
 
     const fileData = currentDocument?.fileData as string;
 
-    // Create an iframe dynamically
+   
     const printFrame = document.createElement('iframe');
     printFrame.style.visibility = 'hidden';
     printFrame.src = fileData;
 
-    // Append the iframe to the document body
+    
     document.body.appendChild(printFrame);
 
-    // Set focus and print the content
-    printFrame.contentWindow?.focus();
-    printFrame.contentWindow?.print();
-
-    // Remove the iframe after printing
-    document.body.removeChild(printFrame);
+    setTimeout(() => {
+      printFrame.contentWindow?.focus();
+      printFrame.contentWindow?.print();
+      document.body.removeChild(printFrame);
+    }, 1000);
   };
 
  
