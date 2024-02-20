@@ -23,45 +23,31 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
-  // const handlePrint = () => {
-  //   console.log(currentDocument)
-  //   console.log(currentDocument?.fileData)
-  //   console.log('Printing...');
+  const handlePrint = () => {
+    console.log(currentDocument)
+    console.log(currentDocument?.fileData)
+    
+    console.log('Printing...');
 
-  //   const fileData = currentDocument?.fileData as string;
+    const fileData = currentDocument?.fileData as string;
 
    
-  //   const printFrame = document.createElement('iframe');
-  //   printFrame.style.visibility = 'hidden';
-  //   printFrame.src = fileData;
+    const printFrame = document.createElement('iframe');
+    printFrame.style.visibility = 'hidden';
+    printFrame.src = fileData;
 
     
-  //   document.body.appendChild(printFrame);
+    document.body.appendChild(printFrame);
 
-  //   // Set focus and print the content
-  //   printFrame.contentWindow?.focus();
-  //   printFrame.contentWindow?.print();
+    // Set focus and print the content
+    printFrame.contentWindow?.focus();
+    printFrame.contentWindow?.print();
 
-  //   // Remove the iframe after printing
-  //   document.body.removeChild(printFrame);
-  // };
+    // Remove the iframe after printing
+    document.body.removeChild(printFrame);
+  };
 
-  const handlePrint = () => {
-    console.log('Printing...');
-    const fileData = currentDocument?.fileData as string;
-  
-    // Open a new window and set its content to the PDF data
-    const printWindow = window.open('', '_blank');
-    printWindow?.document.write(`<iframe width="100%" height="100%" src="${fileData}"></iframe>`);
-    printWindow?.document.close();
-  
-    // Wait for the content to load and then print
-    printWindow?.setTimeout(() => {
-      printWindow?.focus();
-      printWindow?.print();
-      printWindow?.close();
-    }, 1000); // Adjust the delay as needed
-  }; 
+ 
 
   return (
     <Container id="pdf-controls">

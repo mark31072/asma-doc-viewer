@@ -41,34 +41,21 @@ var PDFPagination_1 = __importDefault(require("./PDFPagination"));
 var PDFControls = function () {
     var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
-    // const handlePrint = () => {
-    //   console.log(currentDocument)
-    //   console.log(currentDocument?.fileData)
-    //   console.log('Printing...');
-    //   const fileData = currentDocument?.fileData as string;
-    //   const printFrame = document.createElement('iframe');
-    //   printFrame.style.visibility = 'hidden';
-    //   printFrame.src = fileData;
-    //   document.body.appendChild(printFrame);
-    //   // Set focus and print the content
-    //   printFrame.contentWindow?.focus();
-    //   printFrame.contentWindow?.print();
-    //   // Remove the iframe after printing
-    //   document.body.removeChild(printFrame);
-    // };
     var handlePrint = function () {
+        var _a, _b;
+        console.log(currentDocument);
+        console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
         console.log('Printing...');
         var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
-        // Open a new window and set its content to the PDF data
-        var printWindow = window.open('', '_blank');
-        printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.write("<iframe width=\"100%\" height=\"100%\" src=\"".concat(fileData, "\"></iframe>"));
-        printWindow === null || printWindow === void 0 ? void 0 : printWindow.document.close();
-        // Wait for the content to load and then print
-        printWindow === null || printWindow === void 0 ? void 0 : printWindow.setTimeout(function () {
-            printWindow === null || printWindow === void 0 ? void 0 : printWindow.focus();
-            printWindow === null || printWindow === void 0 ? void 0 : printWindow.print();
-            printWindow === null || printWindow === void 0 ? void 0 : printWindow.close();
-        }, 1000); // Adjust the delay as needed
+        var printFrame = document.createElement('iframe');
+        printFrame.style.visibility = 'hidden';
+        printFrame.src = fileData;
+        document.body.appendChild(printFrame);
+        // Set focus and print the content
+        (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
+        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
+        // Remove the iframe after printing
+        document.body.removeChild(printFrame);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
