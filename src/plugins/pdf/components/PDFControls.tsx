@@ -66,8 +66,11 @@ const PDFControls: FC<{}> = () => {
   
     const pdfBlob = new Blob([fileData], { type: "application/pdf" });
     const url = URL.createObjectURL(pdfBlob);
-    printJS(url);
-    window.open(url);
+    printJS({
+      printable: url,
+      type: 'pdf',
+    });
+    console.log(url)
     
    
   };

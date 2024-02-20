@@ -107,8 +107,11 @@ var PDFControls = function () {
             fileData = (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) || "";
             pdfBlob = new Blob([fileData], { type: "application/pdf" });
             url = URL.createObjectURL(pdfBlob);
-            (0, print_js_1.default)(url);
-            window.open(url);
+            (0, print_js_1.default)({
+                printable: url,
+                type: 'pdf',
+            });
+            console.log(url);
             return [2 /*return*/];
         });
     }); };
