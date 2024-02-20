@@ -67,7 +67,7 @@ const PDFControls: FC<{}> = () => {
         <PrintPDFIcon color="#000" size="65%" />
       </ControlButton>
       
-      <iframe src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
+      <iframe src="./test.pdf" style={{ width: "100%", height: "100%" }} />
 
 
       <ControlButton

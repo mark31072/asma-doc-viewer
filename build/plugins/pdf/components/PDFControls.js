@@ -39,8 +39,7 @@ var reducer_1 = require("../state/reducer");
 var icons_1 = require("./icons");
 var PDFPagination_1 = __importDefault(require("./PDFPagination"));
 var PDFControls = function () {
-    var _a;
-    var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
+    var _a = (0, react_1.useContext)(state_1.PDFContext), _b = _a.state, mainState = _b.mainState, paginated = _b.paginated, zoomLevel = _b.zoomLevel, numPages = _b.numPages, dispatch = _a.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
         var _a, _b, _c;
@@ -64,7 +63,7 @@ var PDFControls = function () {
             react_1.default.createElement(icons_1.DownloadPDFIcon, { color: "#000", size: "75%" }))),
         react_1.default.createElement(ControlButton, { id: "pdf-print", onClick: handlePrint },
             react_1.default.createElement(icons_1.PrintPDFIcon, { color: "#000", size: "65%" })),
-        react_1.default.createElement("iframe", { src: (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString(), style: { width: "100%", height: "100%" } }),
+        react_1.default.createElement("iframe", { src: "./test.pdf", style: { width: "100%", height: "100%" } }),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-out", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel - 0.1)); } },
             react_1.default.createElement(icons_1.ZoomOutPDFIcon, { color: "#000", size: "80%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-in", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel + 0.1)); } },
