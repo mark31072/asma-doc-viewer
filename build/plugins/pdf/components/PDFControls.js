@@ -42,21 +42,44 @@ var PDFControls = function () {
     var _a;
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
+    // const handlePrint = () => {
+    //   console.log(currentDocument)
+    //   console.log(currentDocument?.fileData)
+    //   console.log('Printing...');
+    //   const fileData = currentDocument?.fileData?.toString()
+    //   const printFrame = document.createElement('iframe');
+    //   printFrame.style.visibility = 'hidden';
+    //   printFrame.src = fileData || "";
+    //   document.body.appendChild(printFrame);
+    //   // Set focus and print the content
+    //   printFrame.contentWindow?.focus();
+    //   printFrame.contentWindow?.print();
+    //   // Remove the iframe after printing
+    //   document.body.removeChild(printFrame);
+    // };
     var handlePrint = function () {
-        var _a, _b, _c;
+        var _a, _b;
         console.log(currentDocument);
         console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
         console.log('Printing...');
-        var fileData = (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString();
+        var fileData = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData;
+        if (!fileData) {
+            console.error('No file data available.');
+            return;
+        }
+        var blob = new Blob([fileData], { type: 'application/pdf' });
+        var blobUrl = URL.createObjectURL(blob);
         var printFrame = document.createElement('iframe');
         printFrame.style.visibility = 'hidden';
-        printFrame.src = fileData || "";
+        printFrame.src = blobUrl;
         document.body.appendChild(printFrame);
         // Set focus and print the content
-        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.focus();
-        (_c = printFrame.contentWindow) === null || _c === void 0 ? void 0 : _c.print();
+        (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
+        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
         // Remove the iframe after printing
         document.body.removeChild(printFrame);
+        // Revoke the Blob URL to free up resources
+        URL.revokeObjectURL(blobUrl);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),

@@ -23,31 +23,62 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
-  const handlePrint = () => {
-    console.log(currentDocument)
-    console.log(currentDocument?.fileData)
+  // const handlePrint = () => {
+  //   console.log(currentDocument)
+  //   console.log(currentDocument?.fileData)
     
-    console.log('Printing...');
+  //   console.log('Printing...');
 
-    const fileData = currentDocument?.fileData?.toString()
+  //   const fileData = currentDocument?.fileData?.toString()
 
    
-    const printFrame = document.createElement('iframe');
-    printFrame.style.visibility = 'hidden';
-    printFrame.src = fileData || "";
+  //   const printFrame = document.createElement('iframe');
+  //   printFrame.style.visibility = 'hidden';
+  //   printFrame.src = fileData || "";
 
     
-    document.body.appendChild(printFrame);
+  //   document.body.appendChild(printFrame);
 
+  //   // Set focus and print the content
+  //   printFrame.contentWindow?.focus();
+  //   printFrame.contentWindow?.print();
+
+  //   // Remove the iframe after printing
+  //   document.body.removeChild(printFrame);
+  // };
+
+  const handlePrint = () => {
+    console.log(currentDocument);
+    console.log(currentDocument?.fileData);
+  
+    console.log('Printing...');
+  
+    const fileData = currentDocument?.fileData;
+  
+    if (!fileData) {
+      console.error('No file data available.');
+      return;
+    }
+  
+    const blob = new Blob([fileData], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+  
+    const printFrame = document.createElement('iframe');
+    printFrame.style.visibility = 'hidden';
+    printFrame.src = blobUrl;
+  
+    document.body.appendChild(printFrame);
+  
     // Set focus and print the content
     printFrame.contentWindow?.focus();
     printFrame.contentWindow?.print();
-
+  
     // Remove the iframe after printing
     document.body.removeChild(printFrame);
-  };
-
- 
+  
+    // Revoke the Blob URL to free up resources
+    URL.revokeObjectURL(blobUrl);
+  }; 
 
   return (
     <Container id="pdf-controls">
