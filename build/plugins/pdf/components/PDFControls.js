@@ -58,20 +58,22 @@ var PDFControls = function () {
     //   document.body.removeChild(printFrame);
     // };
     var handlePrint = function () {
+        console.log(currentDocument);
+        console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
         if (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) {
-            console.log(currentDocument);
-            console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
             try {
-                // Trim and decode base64 string
-                var byteCharacters = atob(currentDocument.fileData.toString().trim());
-                // Convert byte characters to array
-                var byteNumbers = new Array(byteCharacters.length);
-                for (var i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                // Verify content type
+                if (!currentDocument.fileData.toString().startsWith('data:application/pdf;base64,')) {
+                    console.error("Invalid PDF content");
+                    // Handle the error as needed
+                    return;
                 }
+                // Extract base64 content
+                var base64Content = currentDocument.fileData.toString().slice(28);
+                // Trim and decode base64 string
+                var byteCharacters = Uint8Array.from(atob(base64Content), function (char) { return char.charCodeAt(0); });
                 // Create Blob from array
-                var byteArray = new Uint8Array(byteNumbers);
-                var blob = new Blob([byteArray], { type: 'application/pdf' });
+                var blob = new Blob([byteCharacters], { type: 'application/pdf' });
                 // Create data URL
                 var dataUrl = URL.createObjectURL(blob);
                 // Open a new window for printing

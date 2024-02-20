@@ -49,22 +49,25 @@ const PDFControls: FC<{}> = () => {
 
   
   const handlePrint = () => {
-    if (currentDocument?.fileData) {
-      console.log(currentDocument)
+    console.log(currentDocument)
     console.log(currentDocument?.fileData)
+    if (currentDocument?.fileData) {
       try {
-        // Trim and decode base64 string
-        const byteCharacters = atob(currentDocument.fileData.toString().trim());
-  
-        // Convert byte characters to array
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        // Verify content type
+        if (!currentDocument.fileData.toString().startsWith('data:application/pdf;base64,')) {
+          console.error("Invalid PDF content");
+          // Handle the error as needed
+          return;
         }
   
+        // Extract base64 content
+        const base64Content = currentDocument.fileData.toString().slice(28);
+  
+        // Trim and decode base64 string
+        const byteCharacters = Uint8Array.from(atob(base64Content), char => char.charCodeAt(0));
+  
         // Create Blob from array
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const blob = new Blob([byteCharacters], { type: 'application/pdf' });
   
         // Create data URL
         const dataUrl = URL.createObjectURL(blob);
@@ -86,6 +89,8 @@ const PDFControls: FC<{}> = () => {
       }
     }
   };
+
+
   return (
     <Container id="pdf-controls">
       {paginated && numPages > 1 && <PDFPagination />}
