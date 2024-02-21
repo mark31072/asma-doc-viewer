@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useRef, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, LinkButton } from "../../../components/common";
 import { IStyledProps } from "../../../types";
@@ -14,7 +14,6 @@ import {
   ZoomOutPDFIcon,
 } from "./icons";
 import PDFPagination from "./PDFPagination";
-import printJS from 'print-js'; 
 
 const PDFControls: FC<{}> = () => {
   const {
@@ -24,25 +23,24 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
-  const receiptIframeRef = useRef<HTMLIFrameElement>(null);
-
-
 
   const handlePrint = () => {
-    if (receiptIframeRef.current) {
-      // Choose preferred approach:
-
-      // Option 1: print-js (for existing iframe)
-      printJS({
-        printable: receiptIframeRef.current.contentWindow,
-        type: 'html',
-      });
-      // Option 2: pdfmake (generate & print new PDF)
-      // const pdfDocDefinition = { ... }; // Define your PDF content
-      // pdfMake.createPdf(pdfDocDefinition).then((pdfBlob) => {
-      //   printJS({ pdfBlob });
-      // });
-    }
+    console.log(currentDocument)
+    console.log(currentDocument?.fileData)
+    
+    console.log('Printing...');
+    const fileData = currentDocument?.fileData?.toString()
+   
+    const printFrame = document.createElement('iframe');
+   // printFrame.style.visibility = 'hidden';
+   // printFrame.src = "./test.pdf";
+    
+    document.body.appendChild(printFrame);
+    // Set focus and print the content
+    printFrame.contentWindow?.focus();
+    printFrame.contentWindow?.print();
+    // Remove the iframe after printing
+    document.body.removeChild(printFrame);
   };
 
 
@@ -62,7 +60,7 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
-<iframe  id="receipt" name="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} ref={receiptIframeRef} />
+<iframe  id="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
 
       <ControlButton id="pdf-print" onClick={handlePrint}>
      
