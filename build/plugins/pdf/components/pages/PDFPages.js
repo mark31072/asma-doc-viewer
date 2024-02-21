@@ -46,7 +46,7 @@ var PDFPages = function () {
     }, [currentDocument]);
     if (!currentDocument || currentDocument.fileData === undefined)
         return null;
-    return (react_1.default.createElement(DocumentPDF, { file: "currentDocument.fileData", onLoadSuccess: function (_a) {
+    return (react_1.default.createElement(DocumentPDF, { file: currentDocument.fileData, onLoadSuccess: function (_a) {
             var numPages = _a.numPages;
             return dispatch((0, actions_1.setNumPages)(numPages));
         }, loading: react_1.default.createElement("span", null, "Loading...") }, paginated ? react_1.default.createElement(PDFSinglePage_1.default, null) : react_1.default.createElement(PDFAllPages_1.PDFAllPages, null)));

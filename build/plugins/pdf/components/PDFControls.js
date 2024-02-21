@@ -43,43 +43,18 @@ var PDFControls = function () {
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
-        // Open a new window or tab
-        var printWindow = window.open('', '_blank');
-        if (printWindow) {
-            // Document content to be printed
-            var printContent = "\n        <html>\n          <head>\n            <title>Print Document</title>\n          </head>\n          <body>\n            <div>".concat(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, "</div>\n          </body>\n        </html>\n      ");
-            // Write content to the new window or tab
-            printWindow.document.write(printContent);
-            // Trigger the print function
-            printWindow.print();
-            // Close the new window or tab after printing (optional)
-            // printWindow.close();
+        var _a;
+        if (receiptIframeRef.current) {
+            receiptIframeRef.current.focus();
+            (_a = receiptIframeRef.current.contentWindow) === null || _a === void 0 ? void 0 : _a.print();
         }
     };
-    // const handlePrint = () => {
-    //   const receiptIframe = document.getElementById("receipt") as HTMLIFrameElement | null;
-    //   if (receiptIframe) {
-    //     receiptIframe.contentWindow?.print();
-    //   }
-    // //   console.log(currentDocument)
-    // //   console.log(currentDocument?.fileData)
-    // //   console.log('Printing...');
-    // //   const fileData = currentDocument?.fileData?.toString()
-    // //   const printFrame = document.createElement('iframe');
-    // //  // printFrame.style.visibility = 'hidden';
-    // //  // printFrame.src = "./test.pdf";
-    // //   document.body.appendChild(printFrame);
-    // //   // Set focus and print the content
-    // //   printFrame.contentWindow?.focus();
-    // //   printFrame.contentWindow?.print();
-    // //   // Remove the iframe after printing
-    // //   document.body.removeChild(printFrame);
-    // };
+    var receiptIframeRef = (0, react_1.useRef)(null);
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
         (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) && (react_1.default.createElement(DownloadButton, { id: "pdf-download", href: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, download: (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileName) || (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.uri) },
             react_1.default.createElement(icons_1.DownloadPDFIcon, { color: "#000", size: "75%" }))),
-        react_1.default.createElement("iframe", { id: "receipt", name: "receipt", src: (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString(), style: { width: "100%", height: "100%" } }),
+        react_1.default.createElement("iframe", { id: "receipt", name: "receipt", src: (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString(), style: { width: "100%", height: "100%" }, ref: receiptIframeRef }),
         react_1.default.createElement(ControlButton, { id: "pdf-print", onClick: handlePrint },
             react_1.default.createElement(icons_1.PrintPDFIcon, { color: "#000", size: "65%" })),
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-out", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(zoomLevel - 0.1)); } },
