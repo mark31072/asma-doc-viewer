@@ -24,57 +24,27 @@ const PDFControls: FC<{}> = () => {
   const currentDocument = mainState?.currentDocument || null;
 
 
-
   const handlePrint = () => {
-
-    if (currentDocument?.fileData) {
-      try {
-        // Verify content type
-        if (!currentDocument.fileData.toString().startsWith('data:application/pdf;base64,')) {
-          console.error("Invalid PDF content");
-          // Handle the error as needed
-          return;
-        }
-
-        console.log(currentDocument)
-        console.log(currentDocument?.fileData)
-        
-
-        // Extract base64 content
-        const base64Content = currentDocument.fileData.toString().slice(28);
-
-        // Trim and decode base64 string
-        const byteCharacters = Uint8Array.from(atob(base64Content), char => char.charCodeAt(0));
-
-        // Create Blob from array
-        const blob = new Blob([byteCharacters], { type: 'application/pdf' });
-
-        // Create data URL
-        const dataUrl = URL.createObjectURL(blob);
-
-        const printFrame = document.createElement('iframe');
-        printFrame.style.visibility = 'hidden';
-        printFrame.src = dataUrl;
+    console.log(currentDocument)
+    console.log(currentDocument?.fileData)
     
-        document.body.appendChild(printFrame);
-        // Set focus and print the content
-        printFrame.contentWindow?.focus();
-        printFrame.contentWindow?.print();
-        // Remove the iframe after printing
-        document.body.removeChild(printFrame);
-
-        
-        
-      } catch (error) {
-        console.error("Base64 decoding/printing error:", error);
-        // Handle the error as needed (e.g., show an error message to the user)
-      }
-    }
-
-
-
+    console.log('Printing...');
+    const fileData = currentDocument?.fileData?.toString()
+   
+    const printFrame = document.createElement('iframe');
+   // printFrame.style.visibility = 'hidden';
+   // printFrame.src = "./test.pdf";
+    
+    document.body.appendChild(printFrame);
+    // Set focus and print the content
+    printFrame.contentWindow?.focus();
+    printFrame.contentWindow?.print();
+    // Remove the iframe after printing
+    document.body.removeChild(printFrame);
   };
 
+
+  
 
   
   return (

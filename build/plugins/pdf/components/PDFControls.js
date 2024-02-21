@@ -43,40 +43,20 @@ var PDFControls = function () {
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
-        var _a, _b;
-        if (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) {
-            try {
-                // Verify content type
-                if (!currentDocument.fileData.toString().startsWith('data:application/pdf;base64,')) {
-                    console.error("Invalid PDF content");
-                    // Handle the error as needed
-                    return;
-                }
-                console.log(currentDocument);
-                console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
-                // Extract base64 content
-                var base64Content = currentDocument.fileData.toString().slice(28);
-                // Trim and decode base64 string
-                var byteCharacters = Uint8Array.from(atob(base64Content), function (char) { return char.charCodeAt(0); });
-                // Create Blob from array
-                var blob = new Blob([byteCharacters], { type: 'application/pdf' });
-                // Create data URL
-                var dataUrl = URL.createObjectURL(blob);
-                var printFrame = document.createElement('iframe');
-                printFrame.style.visibility = 'hidden';
-                printFrame.src = dataUrl;
-                document.body.appendChild(printFrame);
-                // Set focus and print the content
-                (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
-                (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
-                // Remove the iframe after printing
-                document.body.removeChild(printFrame);
-            }
-            catch (error) {
-                console.error("Base64 decoding/printing error:", error);
-                // Handle the error as needed (e.g., show an error message to the user)
-            }
-        }
+        var _a, _b, _c;
+        console.log(currentDocument);
+        console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
+        console.log('Printing...');
+        var fileData = (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString();
+        var printFrame = document.createElement('iframe');
+        // printFrame.style.visibility = 'hidden';
+        // printFrame.src = "./test.pdf";
+        document.body.appendChild(printFrame);
+        // Set focus and print the content
+        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.focus();
+        (_c = printFrame.contentWindow) === null || _c === void 0 ? void 0 : _c.print();
+        // Remove the iframe after printing
+        document.body.removeChild(printFrame);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
