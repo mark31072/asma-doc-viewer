@@ -25,26 +25,30 @@ const PDFControls: FC<{}> = () => {
 
 
   const handlePrint = () => {
-    const receiptIframe = document.getElementById("receipt") as HTMLIFrameElement | null;
-  
-    if (receiptIframe) {
-      const printableContent = receiptIframe.contentWindow?.document.body.innerHTML;
-  
-      if (printableContent) {
-        const printWindow = window.open("", "printWindow", "width=800,height=600");
-  
-        // Check if the window was opened successfully
-        if (printWindow) {
-          printWindow.document.write(printableContent);
-          printWindow.document.close();
-          printWindow.focus();
-          printWindow.print();
-          printWindow.close();
-        } else {
-          // Handle the case where window.open failed
-          console.error("Failed to open print window.");
-        }
-      }
+    // Open a new window or tab
+    const printWindow = window.open('', '_blank');
+    
+    if (printWindow) {
+      // Document content to be printed
+      const printContent = `
+        <html>
+          <head>
+            <title>Print Document</title>
+          </head>
+          <body>
+            <div>${currentDocument?.fileData}</div>
+          </body>
+        </html>
+      `;
+      
+      // Write content to the new window or tab
+      printWindow.document.write(printContent);
+      
+      // Trigger the print function
+      printWindow.print();
+      
+      // Close the new window or tab after printing (optional)
+      // printWindow.close();
     }
   };
 

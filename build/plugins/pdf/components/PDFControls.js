@@ -43,25 +43,17 @@ var PDFControls = function () {
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
-        var _a;
-        var receiptIframe = document.getElementById("receipt");
-        if (receiptIframe) {
-            var printableContent = (_a = receiptIframe.contentWindow) === null || _a === void 0 ? void 0 : _a.document.body.innerHTML;
-            if (printableContent) {
-                var printWindow = window.open("", "printWindow", "width=800,height=600");
-                // Check if the window was opened successfully
-                if (printWindow) {
-                    printWindow.document.write(printableContent);
-                    printWindow.document.close();
-                    printWindow.focus();
-                    printWindow.print();
-                    printWindow.close();
-                }
-                else {
-                    // Handle the case where window.open failed
-                    console.error("Failed to open print window.");
-                }
-            }
+        // Open a new window or tab
+        var printWindow = window.open('', '_blank');
+        if (printWindow) {
+            // Document content to be printed
+            var printContent = "\n        <html>\n          <head>\n            <title>Print Document</title>\n          </head>\n          <body>\n            <div>".concat(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, "</div>\n          </body>\n        </html>\n      ");
+            // Write content to the new window or tab
+            printWindow.document.write(printContent);
+            // Trigger the print function
+            printWindow.print();
+            // Close the new window or tab after printing (optional)
+            // printWindow.close();
         }
     };
     // const handlePrint = () => {
