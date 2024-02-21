@@ -26,27 +26,52 @@ const PDFControls: FC<{}> = () => {
 
   const handlePrint = () => {
     const receiptIframe = document.getElementById("receipt") as HTMLIFrameElement | null;
-
+  
     if (receiptIframe) {
-      receiptIframe.contentWindow?.print();
+      const printableContent = receiptIframe.contentWindow?.document.body.innerHTML;
+  
+      if (printableContent) {
+        const printWindow = window.open("", "printWindow", "width=800,height=600");
+  
+        // Check if the window was opened successfully
+        if (printWindow) {
+          printWindow.document.write(printableContent);
+          printWindow.document.close();
+          printWindow.focus();
+          printWindow.print();
+          printWindow.close();
+        } else {
+          // Handle the case where window.open failed
+          console.error("Failed to open print window.");
+        }
+      }
     }
-  //   console.log(currentDocument)
-  //   console.log(currentDocument?.fileData)
-    
-  //   console.log('Printing...');
-  //   const fileData = currentDocument?.fileData?.toString()
-   
-  //   const printFrame = document.createElement('iframe');
-  //  // printFrame.style.visibility = 'hidden';
-  //  // printFrame.src = "./test.pdf";
-    
-  //   document.body.appendChild(printFrame);
-  //   // Set focus and print the content
-  //   printFrame.contentWindow?.focus();
-  //   printFrame.contentWindow?.print();
-  //   // Remove the iframe after printing
-  //   document.body.removeChild(printFrame);
   };
+
+
+  // const handlePrint = () => {
+  //   const receiptIframe = document.getElementById("receipt") as HTMLIFrameElement | null;
+
+  //   if (receiptIframe) {
+  //     receiptIframe.contentWindow?.print();
+  //   }
+  // //   console.log(currentDocument)
+  // //   console.log(currentDocument?.fileData)
+    
+  // //   console.log('Printing...');
+  // //   const fileData = currentDocument?.fileData?.toString()
+   
+  // //   const printFrame = document.createElement('iframe');
+  // //  // printFrame.style.visibility = 'hidden';
+  // //  // printFrame.src = "./test.pdf";
+    
+  // //   document.body.appendChild(printFrame);
+  // //   // Set focus and print the content
+  // //   printFrame.contentWindow?.focus();
+  // //   printFrame.contentWindow?.print();
+  // //   // Remove the iframe after printing
+  // //   document.body.removeChild(printFrame);
+  // };
 
 
   

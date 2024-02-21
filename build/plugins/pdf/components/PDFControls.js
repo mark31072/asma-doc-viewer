@@ -46,22 +46,43 @@ var PDFControls = function () {
         var _a;
         var receiptIframe = document.getElementById("receipt");
         if (receiptIframe) {
-            (_a = receiptIframe.contentWindow) === null || _a === void 0 ? void 0 : _a.print();
+            var printableContent = (_a = receiptIframe.contentWindow) === null || _a === void 0 ? void 0 : _a.document.body.innerHTML;
+            if (printableContent) {
+                var printWindow = window.open("", "printWindow", "width=800,height=600");
+                // Check if the window was opened successfully
+                if (printWindow) {
+                    printWindow.document.write(printableContent);
+                    printWindow.document.close();
+                    printWindow.focus();
+                    printWindow.print();
+                    printWindow.close();
+                }
+                else {
+                    // Handle the case where window.open failed
+                    console.error("Failed to open print window.");
+                }
+            }
         }
-        //   console.log(currentDocument)
-        //   console.log(currentDocument?.fileData)
-        //   console.log('Printing...');
-        //   const fileData = currentDocument?.fileData?.toString()
-        //   const printFrame = document.createElement('iframe');
-        //  // printFrame.style.visibility = 'hidden';
-        //  // printFrame.src = "./test.pdf";
-        //   document.body.appendChild(printFrame);
-        //   // Set focus and print the content
-        //   printFrame.contentWindow?.focus();
-        //   printFrame.contentWindow?.print();
-        //   // Remove the iframe after printing
-        //   document.body.removeChild(printFrame);
     };
+    // const handlePrint = () => {
+    //   const receiptIframe = document.getElementById("receipt") as HTMLIFrameElement | null;
+    //   if (receiptIframe) {
+    //     receiptIframe.contentWindow?.print();
+    //   }
+    // //   console.log(currentDocument)
+    // //   console.log(currentDocument?.fileData)
+    // //   console.log('Printing...');
+    // //   const fileData = currentDocument?.fileData?.toString()
+    // //   const printFrame = document.createElement('iframe');
+    // //  // printFrame.style.visibility = 'hidden';
+    // //  // printFrame.src = "./test.pdf";
+    // //   document.body.appendChild(printFrame);
+    // //   // Set focus and print the content
+    // //   printFrame.contentWindow?.focus();
+    // //   printFrame.contentWindow?.print();
+    // //   // Remove the iframe after printing
+    // //   document.body.removeChild(printFrame);
+    // };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
         (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) && (react_1.default.createElement(DownloadButton, { id: "pdf-download", href: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, download: (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileName) || (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.uri) },

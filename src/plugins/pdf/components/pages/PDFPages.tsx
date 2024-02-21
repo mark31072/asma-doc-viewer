@@ -23,7 +23,7 @@ const PDFPages: FC<{}> = () => {
 
   return (
     <DocumentPDF
-      file={currentDocument.fileData}
+      file={"currentDocument.fileData"}
       onLoadSuccess={({ numPages }) => dispatch(setNumPages(numPages))}
       loading={<span>Loading...</span>}
     >
