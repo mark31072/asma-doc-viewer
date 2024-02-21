@@ -25,22 +25,27 @@ const PDFControls: FC<{}> = () => {
 
 
   const handlePrint = () => {
-    console.log(currentDocument)
-    console.log(currentDocument?.fileData)
+    const receiptIframe = document.getElementById("receipt") as HTMLIFrameElement | null;
+
+    if (receiptIframe) {
+      receiptIframe.contentWindow?.print();
+    }
+  //   console.log(currentDocument)
+  //   console.log(currentDocument?.fileData)
     
-    console.log('Printing...');
-    const fileData = currentDocument?.fileData?.toString()
+  //   console.log('Printing...');
+  //   const fileData = currentDocument?.fileData?.toString()
    
-    const printFrame = document.createElement('iframe');
-   // printFrame.style.visibility = 'hidden';
-   // printFrame.src = "./test.pdf";
+  //   const printFrame = document.createElement('iframe');
+  //  // printFrame.style.visibility = 'hidden';
+  //  // printFrame.src = "./test.pdf";
     
-    document.body.appendChild(printFrame);
-    // Set focus and print the content
-    printFrame.contentWindow?.focus();
-    printFrame.contentWindow?.print();
-    // Remove the iframe after printing
-    document.body.removeChild(printFrame);
+  //   document.body.appendChild(printFrame);
+  //   // Set focus and print the content
+  //   printFrame.contentWindow?.focus();
+  //   printFrame.contentWindow?.print();
+  //   // Remove the iframe after printing
+  //   document.body.removeChild(printFrame);
   };
 
 
@@ -60,7 +65,7 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
-<iframe  id="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
+<iframe  id="receipt" name="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
 
       <ControlButton id="pdf-print" onClick={handlePrint}>
      
