@@ -23,10 +23,10 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
-  const [showPrintModal, setShowPrintModal] = useState(false);
-  const [printDataUrl, setPrintDataUrl] = useState<string | null>(null);
+
 
   const handlePrint = () => {
+
     if (currentDocument?.fileData) {
       try {
         // Verify content type
@@ -35,6 +35,10 @@ const PDFControls: FC<{}> = () => {
           // Handle the error as needed
           return;
         }
+
+        console.log(currentDocument)
+        console.log(currentDocument?.fileData)
+        
 
         // Extract base64 content
         const base64Content = currentDocument.fileData.toString().slice(28);
@@ -48,36 +52,31 @@ const PDFControls: FC<{}> = () => {
         // Create data URL
         const dataUrl = URL.createObjectURL(blob);
 
-        // Set the data URL in the state and show the print modal
-        setPrintDataUrl(dataUrl);
-        setShowPrintModal(true);
+        const printFrame = document.createElement('iframe');
+        printFrame.style.visibility = 'hidden';
+        printFrame.src = dataUrl;
+    
+        document.body.appendChild(printFrame);
+        // Set focus and print the content
+        printFrame.contentWindow?.focus();
+        printFrame.contentWindow?.print();
+        // Remove the iframe after printing
+        document.body.removeChild(printFrame);
+
+        
+        
       } catch (error) {
         console.error("Base64 decoding/printing error:", error);
         // Handle the error as needed (e.g., show an error message to the user)
       }
     }
+
+
+
   };
 
-  const handleClosePrintModal = () => {
-    // Hide the print modal
-    setShowPrintModal(false);
-  };
 
-  interface PrintModalProps {
-    dataUrl: string;
-    onClose: () => void;
-  }
   
-  const PrintModal: FC<PrintModalProps> = ({ dataUrl, onClose }) => {
-    return (
-      <ModalOverlay>
-        <ModalContent>
-          <iframe src={dataUrl} style={{ width: "100%", height: "100%" }} title="Print Preview" />
-          <CloseButton onClick={onClose}>Close</CloseButton>
-        </ModalContent>
-      </ModalOverlay>
-    );
-  };
   return (
     <Container id="pdf-controls">
       {paginated && numPages > 1 && <PDFPagination />}
@@ -134,9 +133,7 @@ const PDFControls: FC<{}> = () => {
           />
         </ControlButton>
       )}
-      {showPrintModal && (
-        <PrintModal dataUrl={printDataUrl || ""} onClose={handleClosePrintModal} />
-      )}
+     
     </Container>
   );
 };

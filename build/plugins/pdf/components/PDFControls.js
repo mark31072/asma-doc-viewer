@@ -42,9 +42,8 @@ var PDFControls = function () {
     var _a;
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
-    var _d = (0, react_1.useState)(false), showPrintModal = _d[0], setShowPrintModal = _d[1];
-    var _e = (0, react_1.useState)(null), printDataUrl = _e[0], setPrintDataUrl = _e[1];
     var handlePrint = function () {
+        var _a, _b;
         if (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) {
             try {
                 // Verify content type
@@ -53,6 +52,8 @@ var PDFControls = function () {
                     // Handle the error as needed
                     return;
                 }
+                console.log(currentDocument);
+                console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
                 // Extract base64 content
                 var base64Content = currentDocument.fileData.toString().slice(28);
                 // Trim and decode base64 string
@@ -61,26 +62,21 @@ var PDFControls = function () {
                 var blob = new Blob([byteCharacters], { type: 'application/pdf' });
                 // Create data URL
                 var dataUrl = URL.createObjectURL(blob);
-                // Set the data URL in the state and show the print modal
-                setPrintDataUrl(dataUrl);
-                setShowPrintModal(true);
+                var printFrame = document.createElement('iframe');
+                printFrame.style.visibility = 'hidden';
+                printFrame.src = dataUrl;
+                document.body.appendChild(printFrame);
+                // Set focus and print the content
+                (_a = printFrame.contentWindow) === null || _a === void 0 ? void 0 : _a.focus();
+                (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.print();
+                // Remove the iframe after printing
+                document.body.removeChild(printFrame);
             }
             catch (error) {
                 console.error("Base64 decoding/printing error:", error);
                 // Handle the error as needed (e.g., show an error message to the user)
             }
         }
-    };
-    var handleClosePrintModal = function () {
-        // Hide the print modal
-        setShowPrintModal(false);
-    };
-    var PrintModal = function (_a) {
-        var dataUrl = _a.dataUrl, onClose = _a.onClose;
-        return (react_1.default.createElement(ModalOverlay, null,
-            react_1.default.createElement(ModalContent, null,
-                react_1.default.createElement("iframe", { src: dataUrl, style: { width: "100%", height: "100%" }, title: "Print Preview" }),
-                react_1.default.createElement(CloseButton, { onClick: onClose }, "Close"))));
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
@@ -96,8 +92,7 @@ var PDFControls = function () {
         react_1.default.createElement(ControlButton, { id: "pdf-zoom-reset", onMouseDown: function () { return dispatch((0, actions_1.setZoomLevel)(reducer_1.initialPDFState.zoomLevel)); }, disabled: zoomLevel === reducer_1.initialPDFState.zoomLevel },
             react_1.default.createElement(icons_1.ResetZoomPDFIcon, { color: "#000", size: "70%" })),
         numPages > 1 && (react_1.default.createElement(ControlButton, { id: "pdf-toggle-pagination", onMouseDown: function () { return dispatch((0, actions_1.setPDFPaginated)(!paginated)); } },
-            react_1.default.createElement(icons_1.TogglePaginationPDFIcon, { color: "#000", size: "70%", reverse: paginated }))),
-        showPrintModal && (react_1.default.createElement(PrintModal, { dataUrl: printDataUrl || "", onClose: handleClosePrintModal }))));
+            react_1.default.createElement(icons_1.TogglePaginationPDFIcon, { color: "#000", size: "70%", reverse: paginated })))));
 };
 exports.default = PDFControls;
 var Container = styled_components_1.default.div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  display: flex;\n  position: sticky;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  justify-content: flex-end;\n  padding: 8px;\n  background-color: ", ";\n  box-shadow: 0px 2px 3px #00000033;\n\n  @media (max-width: 768px) {\n    padding: 6px;\n  }\n"], ["\n  display: flex;\n  position: sticky;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  justify-content: flex-end;\n  padding: 8px;\n  background-color: ", ";\n  box-shadow: 0px 2px 3px #00000033;\n\n  @media (max-width: 768px) {\n    padding: 6px;\n  }\n"])), function (props) { return props.theme.tertiary; });
