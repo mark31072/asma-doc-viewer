@@ -38,25 +38,32 @@ var actions_1 = require("../state/actions");
 var reducer_1 = require("../state/reducer");
 var icons_1 = require("./icons");
 var PDFPagination_1 = __importDefault(require("./PDFPagination"));
+var print_js_1 = __importDefault(require("print-js"));
 var PDFControls = function () {
     var _a;
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
     var handlePrint = function () {
-        var _a, _b, _c;
+        var _a, _b;
         console.log(currentDocument);
         console.log(currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData);
-        console.log('Printing...');
-        var fileData = (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString();
-        var printFrame = document.createElement('iframe');
-        // printFrame.style.visibility = 'hidden';
-        // printFrame.src = "./test.pdf";
-        document.body.appendChild(printFrame);
-        // Set focus and print the content
-        (_b = printFrame.contentWindow) === null || _b === void 0 ? void 0 : _b.focus();
-        (_c = printFrame.contentWindow) === null || _c === void 0 ? void 0 : _c.print();
-        // Remove the iframe after printing
-        document.body.removeChild(printFrame);
+        var print_base64 = (_a = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _a === void 0 ? void 0 : _a.toString().slice(((_b = currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) === null || _b === void 0 ? void 0 : _b.toString().indexOf(',')) + 1);
+        (0, print_js_1.default)({
+            printable: print_base64,
+            type: 'pdf',
+            base64: true,
+        });
+        //   console.log('Printing...');
+        //   const fileData = currentDocument?.fileData?.toString()
+        //   const printFrame = document.createElement('iframe');
+        //  // printFrame.style.visibility = 'hidden';
+        //  // printFrame.src = "./test.pdf";
+        //   document.body.appendChild(printFrame);
+        //   // Set focus and print the content
+        //   printFrame.contentWindow?.focus();
+        //   printFrame.contentWindow?.print();
+        //   // Remove the iframe after printing
+        //   document.body.removeChild(printFrame);
     };
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),

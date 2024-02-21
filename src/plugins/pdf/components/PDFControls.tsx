@@ -14,6 +14,7 @@ import {
   ZoomOutPDFIcon,
 } from "./icons";
 import PDFPagination from "./PDFPagination";
+import printJS from "print-js";
 
 const PDFControls: FC<{}> = () => {
   const {
@@ -27,20 +28,29 @@ const PDFControls: FC<{}> = () => {
   const handlePrint = () => {
     console.log(currentDocument)
     console.log(currentDocument?.fileData)
-    
-    console.log('Printing...');
-    const fileData = currentDocument?.fileData?.toString()
+
+    const print_base64 = currentDocument?.fileData?.toString().slice(currentDocument?.fileData?.toString().indexOf(',') + 1);
+
+    printJS({
+      printable: print_base64,
+      type: 'pdf',
+      base64: true,
+    });
+
+
+  //   console.log('Printing...');
+  //   const fileData = currentDocument?.fileData?.toString()
    
-    const printFrame = document.createElement('iframe');
-   // printFrame.style.visibility = 'hidden';
-   // printFrame.src = "./test.pdf";
+  //   const printFrame = document.createElement('iframe');
+  //  // printFrame.style.visibility = 'hidden';
+  //  // printFrame.src = "./test.pdf";
     
-    document.body.appendChild(printFrame);
-    // Set focus and print the content
-    printFrame.contentWindow?.focus();
-    printFrame.contentWindow?.print();
-    // Remove the iframe after printing
-    document.body.removeChild(printFrame);
+  //   document.body.appendChild(printFrame);
+  //   // Set focus and print the content
+  //   printFrame.contentWindow?.focus();
+  //   printFrame.contentWindow?.print();
+  //   // Remove the iframe after printing
+  //   document.body.removeChild(printFrame);
   };
 
 
