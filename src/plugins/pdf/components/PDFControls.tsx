@@ -14,6 +14,7 @@ import {
   ZoomOutPDFIcon,
 } from "./icons";
 import PDFPagination from "./PDFPagination";
+import printJS from 'print-js'; 
 
 const PDFControls: FC<{}> = () => {
   const {
@@ -23,16 +24,26 @@ const PDFControls: FC<{}> = () => {
 
   const currentDocument = mainState?.currentDocument || null;
 
+  const receiptIframeRef = useRef<HTMLIFrameElement>(null);
+
 
 
   const handlePrint = () => {
     if (receiptIframeRef.current) {
-      receiptIframeRef.current.focus();
-      receiptIframeRef.current.contentWindow?.print();
+      // Choose preferred approach:
+
+      // Option 1: print-js (for existing iframe)
+      printJS({
+        printable: receiptIframeRef.current.contentWindow,
+        type: 'html',
+      });
+      // Option 2: pdfmake (generate & print new PDF)
+      // const pdfDocDefinition = { ... }; // Define your PDF content
+      // pdfMake.createPdf(pdfDocDefinition).then((pdfBlob) => {
+      //   printJS({ pdfBlob });
+      // });
     }
   };
-
-  const receiptIframeRef = useRef<HTMLIFrameElement>(null);
 
 
   

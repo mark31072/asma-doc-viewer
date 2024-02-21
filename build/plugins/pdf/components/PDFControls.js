@@ -38,18 +38,27 @@ var actions_1 = require("../state/actions");
 var reducer_1 = require("../state/reducer");
 var icons_1 = require("./icons");
 var PDFPagination_1 = __importDefault(require("./PDFPagination"));
+var print_js_1 = __importDefault(require("print-js"));
 var PDFControls = function () {
     var _a;
     var _b = (0, react_1.useContext)(state_1.PDFContext), _c = _b.state, mainState = _c.mainState, paginated = _c.paginated, zoomLevel = _c.zoomLevel, numPages = _c.numPages, dispatch = _b.dispatch;
     var currentDocument = (mainState === null || mainState === void 0 ? void 0 : mainState.currentDocument) || null;
+    var receiptIframeRef = (0, react_1.useRef)(null);
     var handlePrint = function () {
-        var _a;
         if (receiptIframeRef.current) {
-            receiptIframeRef.current.focus();
-            (_a = receiptIframeRef.current.contentWindow) === null || _a === void 0 ? void 0 : _a.print();
+            // Choose preferred approach:
+            // Option 1: print-js (for existing iframe)
+            (0, print_js_1.default)({
+                printable: receiptIframeRef.current.contentWindow,
+                type: 'html',
+            });
+            // Option 2: pdfmake (generate & print new PDF)
+            // const pdfDocDefinition = { ... }; // Define your PDF content
+            // pdfMake.createPdf(pdfDocDefinition).then((pdfBlob) => {
+            //   printJS({ pdfBlob });
+            // });
         }
     };
-    var receiptIframeRef = (0, react_1.useRef)(null);
     return (react_1.default.createElement(Container, { id: "pdf-controls" },
         paginated && numPages > 1 && react_1.default.createElement(PDFPagination_1.default, null),
         (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData) && (react_1.default.createElement(DownloadButton, { id: "pdf-download", href: currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileData, download: (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.fileName) || (currentDocument === null || currentDocument === void 0 ? void 0 : currentDocument.uri) },
