@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext } from "react";
 import styled from "styled-components";
 import { Button, LinkButton } from "../../../components/common";
 import { IStyledProps } from "../../../types";
@@ -23,12 +23,8 @@ const PDFControls: FC<{}> = () => {
   } = useContext(PDFContext);
 
   const currentDocument = mainState?.currentDocument || null;
-
-
+  
   const handlePrint = () => {
-    console.log(currentDocument)
-    console.log(currentDocument?.fileData)
-
     const print_base64 = currentDocument?.fileData?.toString().slice(currentDocument?.fileData?.toString().indexOf(',') + 1);
 
     printJS({
@@ -36,27 +32,9 @@ const PDFControls: FC<{}> = () => {
       type: 'pdf',
       base64: true,
     });
-
-
-  //   console.log('Printing...');
-  //   const fileData = currentDocument?.fileData?.toString()
-   
-  //   const printFrame = document.createElement('iframe');
-  //  // printFrame.style.visibility = 'hidden';
-  //  // printFrame.src = "./test.pdf";
-    
-  //   document.body.appendChild(printFrame);
-  //   // Set focus and print the content
-  //   printFrame.contentWindow?.focus();
-  //   printFrame.contentWindow?.print();
-  //   // Remove the iframe after printing
-  //   document.body.removeChild(printFrame);
   };
 
 
-  
-
-  
   return (
     <Container id="pdf-controls">
       {paginated && numPages > 1 && <PDFPagination />}
@@ -70,7 +48,6 @@ const PDFControls: FC<{}> = () => {
           <DownloadPDFIcon color="#000" size="75%" />
         </DownloadButton>
       )}
-<iframe  id="receipt" src={currentDocument?.fileData?.toString()} style={{ width: "100%", height: "100%" }} />
 
       <ControlButton id="pdf-print" onClick={handlePrint}>
      
